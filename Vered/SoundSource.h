@@ -23,6 +23,7 @@ private:
 	int queued = 0;
 
 	std::queue<vered::buffer16*> bQueue;
+	std::queue<ALuint> toBeFilled;
 
 	ALuint * aBuffer;
 	ALuint* bBuffer;

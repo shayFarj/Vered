@@ -90,54 +90,84 @@ void SoundSource::stream()
 	if (!this->firstQue)
 	{
 		
-		std::cout << processed << std::endl;
-
 		while (processed > 0)
 		{
 			ALuint pBuffer;
 
 			alSourceUnqueueBuffers(this->source, 1, &pBuffer);
-
+			
 			processed--;
+			
 
 
 			if (this->bQueue.size() != 0)
 			{
 
-				std::cout << "one will be waiting" << std::endl;
+				
 				vered::buffer16* buffer = this->bQueue.front();
 
+
 				alBufferData(pBuffer, AL_FORMAT_STEREO16, buffer->buffer, buffer->samples, buffer->sample_rate);
+				
+
 				delete buffer;
 
 				this->queued++;
 
 				this->bQueue.pop();
-				alSourceQueueBuffers(this->source, 1, &pBuffer);
-			}
-			else
-				std::cout << "no one's waiting" << std::endl;
 
+				//std::cout << this->queued << " : one will be waiting" << std::endl;
+
+				
+			}
+			else {
+				//std::cout << "no one's waiting" << std::endl;
+				this->toBeFilled.push(pBuffer);
+			}
+
+		}
+
+		while (this->toBeFilled.size() != 0 && this->bQueue.size() != 0)
+		{
+			ALuint bID = this->toBeFilled.front();
+
+			this->toBeFilled.pop();
+
+			vered::buffer16* buffer = this->bQueue.front();
+
+			alBufferData(bID, AL_FORMAT_STEREO16, buffer->buffer, buffer->samples, buffer->sample_rate);
+
+			this->queued++;
+
+			delete buffer;
+
+			this->bQueue.pop();
+
+		}
+		
+
+		if (this->queued == this->queueSize) {
+			alSourceQueueBuffers(this->source, this->queueSize, this->aBuffer);
+			this->queued = 0;
+
+			if (playing != AL_PLAYING && playing != AL_PAUSED)
+			{
+				ALint atQue = 0;
+				alGetSourcei(this->source, AL_BUFFERS_QUEUED, &atQue);
+
+				if (atQue >= this->queued) {
+
+					alSourcePlay(this->source);
+				}
+			}
+		}
+		else
+		{
+			//std::cout << this->queued << " : Almost!" << std::endl;
 		}
 
 		
-		//	this->queued = 0;
-		//}
-
-
-		if (playing != AL_PLAYING && playing != AL_PAUSED)
-		{
-			ALint atQue = 0;
-			alGetSourcei(this->source, AL_BUFFERS_QUEUED, &atQue);
-
-			std::cout << "atQue : " << atQue << std::endl;
-
-			if (atQue == this->queueSize) {
-				
-				std::cout << this->queued << " : Too much que!" << std::endl;
-				this->queued = 0;
-			}
-		}
+		
 	}
 }
 

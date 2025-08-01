@@ -10,11 +10,11 @@
 #include <AL/al.h>
 #include "string"
 
-MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),mixer(nullptr),source(16)
+MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),mixer(nullptr),source(2)
 {
 	// modulation index 0.001 correlates to 40 total level in deflemask
 	Envelope e1(0,0,2,0,3,0,0);
-	Envelope e2(1, 1, 3, 1, 3 + 0.05, 1, 0.5);
+	Envelope e2(1, 0.5, 3, 0.5, 3 + 0.05, 0.5, 0.5);
 
 
 	this->op1 = Operator(1, 0.001,e1);
