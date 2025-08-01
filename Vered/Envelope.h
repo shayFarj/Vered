@@ -1,0 +1,34 @@
+#pragma once
+class Envelope
+{
+public:
+
+	Envelope(double a_x,double a_y, double s_x,double s_y,double d_x,double d_y,double r);
+	~Envelope();
+
+	double calc(double time,double release);
+
+	void setAttack(double x, double y);
+	void setDecay(double x, double y);
+	void setSustain(double x, double y);
+	void setRelease(double r);
+
+
+private:
+	void initAttack(double x, double y);
+	void initDecay(double x, double y);
+	void initSustain(double x, double y);
+
+	double Interpol(double a_y, double a_x, double b_x, double b_y, double t);
+	double a_x =0;
+	double a_y=0;
+
+	double s_x=0;
+	double s_y=0;
+	
+	double d_x=0;
+	double d_y=0;
+
+	double r=0; 
+};
+
