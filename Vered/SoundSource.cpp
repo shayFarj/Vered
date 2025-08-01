@@ -90,6 +90,24 @@ void SoundSource::stream()
 	if (!this->firstQue)
 	{
 		
+		while (this->toBeFilled.size() != 0 && this->bQueue.size() != 0)
+		{
+			ALuint bID = this->toBeFilled.front();
+
+			this->toBeFilled.pop();
+
+			vered::buffer16* buffer = this->bQueue.front();
+
+			alBufferData(bID, AL_FORMAT_STEREO16, buffer->buffer, buffer->samples, buffer->sample_rate);
+
+			this->queued++;
+
+			delete buffer;
+
+			this->bQueue.pop();
+
+		}
+
 		while (processed > 0)
 		{
 			ALuint pBuffer;
@@ -127,23 +145,7 @@ void SoundSource::stream()
 
 		}
 
-		while (this->toBeFilled.size() != 0 && this->bQueue.size() != 0)
-		{
-			ALuint bID = this->toBeFilled.front();
-
-			this->toBeFilled.pop();
-
-			vered::buffer16* buffer = this->bQueue.front();
-
-			alBufferData(bID, AL_FORMAT_STEREO16, buffer->buffer, buffer->samples, buffer->sample_rate);
-
-			this->queued++;
-
-			delete buffer;
-
-			this->bQueue.pop();
-
-		}
+		
 		
 
 		if (this->queued == this->queueSize) {

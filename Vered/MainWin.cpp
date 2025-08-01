@@ -10,7 +10,7 @@
 #include <AL/al.h>
 #include "string"
 
-MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),mixer(nullptr),source(512)
+MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),mixer(nullptr),source(50)
 {
 	// modulation index 0.001 correlates to 40 total level in deflemask
 	Envelope e1(0,0,2,0,3,0,0);
