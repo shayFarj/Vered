@@ -69,7 +69,7 @@ void SoundSource::stream()
 
 	alGetSourcei(this->source, AL_SOURCE_STATE, &playing);
 
-	if (this->firstQue && this->queueSize*2 == this->bQueue.size())
+	if (this->firstQue && this->queueSize == this->bQueue.size())
 	{
 		for (int i = 0; i < this->queueSize; i++)
 		{
@@ -155,7 +155,7 @@ void SoundSource::stream()
 				ALint atQue = 0;
 				alGetSourcei(this->source, AL_BUFFERS_QUEUED, &atQue);
 
-				if (atQue >= this->queued) {
+				if (atQue > this->queued*2) {
 
 					alSourcePlay(this->source);
 				}

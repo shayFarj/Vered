@@ -10,7 +10,7 @@
 #include <AL/al.h>
 #include "string"
 
-MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),mixer(nullptr),source(2)
+MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),mixer(nullptr),source(512)
 {
 	// modulation index 0.001 correlates to 40 total level in deflemask
 	Envelope e1(0,0,2,0,3,0,0);
@@ -115,8 +115,6 @@ void MainWin::render()
 	double* x_range = new double[pBuffer->samples];
 	double* wav = new double[pBuffer->samples];
 
-	if (pBuffer->samples != 0)
-		std::cout << "";
 
 	for (int i = 0; i < pBuffer->samples; i++) {
 		x_range[i] = i;
