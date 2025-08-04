@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)vendor/imgui/backends;$(ProjectDir)vendor/imgui/;$(ProjectDir)vendor/imgui/libs/glfw/include;$(ProjectDir)vendor/implot;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)vendor/imgui/backends;$(ProjectDir)vendor/imgui/;$(ProjectDir)vendor/imgui/libs/glfw/include;$(ProjectDir)vendor/implot;$(ProjectDir)vendor/OIS-1.5.1/includes;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -140,6 +140,7 @@
     <None Include="vendor\imgui\backends\imgui_impl_metal.mm" />
     <None Include="vendor\imgui\backends\imgui_impl_osx.mm" />
     <None Include="vendor\imgui\libs\emscripten\shell_minimal.html" />
+    <None Include="vendor\OIS\OISPrereqs.h.in" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="vendor\imgui\LICENSE.txt" />
@@ -154,6 +155,7 @@
     <ClCompile Include="LiveMixer.cpp" />
     <ClCompile Include="MainWin.cpp" />
     <ClCompile Include="Operator.cpp" />
+    <ClCompile Include="PaStreamer.cpp" />
     <ClCompile Include="SoundSource.cpp" />
     <ClCompile Include="vendor\example_glfw_opengl3\main.cpp" />
     <ClCompile Include="vendor\imgui\backends\imgui_impl_dx10.cpp" />
@@ -185,6 +187,7 @@
     <ClInclude Include="LiveMixer.h" />
     <ClInclude Include="MainWin.h" />
     <ClInclude Include="Operator.h" />
+    <ClInclude Include="PaStreamer.h" />
     <ClInclude Include="SoundSource.h" />
     <ClInclude Include="structs.h" />
     <ClInclude Include="vendor\imgui\backends\imgui_impl_dx10.h" />
@@ -211,6 +214,26 @@
     <ClInclude Include="vendor\imgui\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="vendor\implot\implot.h" />
     <ClInclude Include="vendor\implot\implot_internal.h" />
+    <ClInclude Include="vendor\OIS\includes\Win32ForceFeedback.h" />
+    <ClInclude Include="vendor\OIS\includes\Win32InputManager.h" />
+    <ClInclude Include="vendor\OIS\includes\Win32JoyStick.h" />
+    <ClInclude Include="vendor\OIS\includes\Win32KeyBoard.h" />
+    <ClInclude Include="vendor\OIS\includes\Win32Mouse.h" />
+    <ClInclude Include="vendor\OIS\includes\Win32Prereqs.h" />
+    <ClInclude Include="vendor\OIS\OIS.h" />
+    <ClInclude Include="vendor\OIS\OISConfig.h" />
+    <ClInclude Include="vendor\OIS\OISEffect.h" />
+    <ClInclude Include="vendor\OIS\OISEvents.h" />
+    <ClInclude Include="vendor\OIS\OISException.h" />
+    <ClInclude Include="vendor\OIS\OISFactoryCreator.h" />
+    <ClInclude Include="vendor\OIS\OISForceFeedback.h" />
+    <ClInclude Include="vendor\OIS\OISInputManager.h" />
+    <ClInclude Include="vendor\OIS\OISInterface.h" />
+    <ClInclude Include="vendor\OIS\OISJoyStick.h" />
+    <ClInclude Include="vendor\OIS\OISKeyboard.h" />
+    <ClInclude Include="vendor\OIS\OISMouse.h" />
+    <ClInclude Include="vendor\OIS\OISMultiTouch.h" />
+    <ClInclude Include="vendor\OIS\OISObject.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="vendor\imgui\libs\glfw\lib-vc2010-32\glfw3.lib" />

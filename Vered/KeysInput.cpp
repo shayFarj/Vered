@@ -1,6 +1,7 @@
 #include "KeysInput.h"
 #include <string>
 #include <iostream>
+#include <Windows.h>
 
 int KeysInput::keyboard[24];
 
@@ -10,9 +11,40 @@ double KeysInput::keys_release[24];
 bool KeysInput::firstUse = false;
 
 double KeysInput::delta = 0;
+const char* KeysInput::keys;
+
+bool KeysInput::cPressed[24] = { false,false, false, false, false, false, false, false, false, false, false,
+		false, false, false, false, false, false, false, false, false, false, false, false, false };
+
+
+bool KeysInput::pPressed[24] = { false,false, false, false, false, false, false, false, false, false, false,
+		false, false, false, false, false, false, false, false, false, false, false, false, false };
+
+
 
 
 std::chrono::time_point<std::chrono::steady_clock> KeysInput::prevTime;
+
+void KeysInput::updatePressed()
+{
+	for (int i = 0; i < 24; i++)
+	{
+		KeysInput::pPressed[i] = KeysInput::cPressed[i];
+
+		KeysInput::cPressed[i] = (bool)(GetAsyncKeyState((unsigned char)std::toupper(KeysInput::keys[i])) & 0x8000);
+
+	}
+}
+
+bool KeysInput::hasReleased(int index)
+{
+	return (!KeysInput::cPressed[index]) && KeysInput::pPressed[index];
+}
+
+bool KeysInput::isPressed(int index)
+{
+	return KeysInput::cPressed[index];
+}
 
 KeysInput::~KeysInput()
 {
@@ -27,11 +59,11 @@ const double & KeysInput::getDelta()
 
 KeysInput::KeysInput()
 {
-	const char* keys = "zsxdcvgbhnjmq2w3er5t6y7u";
+	KeysInput::keys = "ZSXDCVGBHNJMQ2W3ER5T6Y7U";
 	
 	for (int i = 0; i < 24; i++)
 	{
-		KeysInput::keyboard[i] = KeysInput::charToImgui(keys[i]);
+		KeysInput::keyboard[i] = KeysInput::charToImgui(KeysInput::keys[i]);
 		KeysInput::keys_press[i] = 0;
 		KeysInput::keys_release[i] = 0;
 	}
@@ -110,4 +142,34 @@ void KeysInput::update()
 
 		KeysInput::prevTime = currTime;
 	}
+}
+
+void KeysInput::update(double delta)
+{
+	KeysInput::delta = delta;
+
+	KeysInput::updatePressed();
+
+	for (int i = 0; i < 24; i++)
+	{
+		if (KeysInput::keys_release[i] > 0)
+			KeysInput::keys_release[i] += KeysInput::delta;
+
+		if (KeysInput::isPressed(i))
+		{
+			if (KeysInput::keys_release[i] != 0)
+				KeysInput::keys_press[i] = 0;
+			KeysInput::keys_press[i] += KeysInput::delta;
+
+			KeysInput::keys_release[i] = 0;
+		}
+
+
+		if (KeysInput::hasReleased(i))
+			KeysInput::keys_release[i] += KeysInput::delta;
+
+	}
+
+	KeysInput::prevTime = std::chrono::steady_clock::now();
+	
 }

@@ -7,17 +7,17 @@
 #include <atomic>
 #include "FourierCalc.h"
 #include <iostream>
-#include <AL/al.h>
 #include "string"
+#include "PaStreamer.h"
 
-MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),mixer(nullptr),source(50)
+MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),mixer(nullptr)
 {
 	// modulation index 0.001 correlates to 40 total level in deflemask
-	Envelope e1(0,0,2,0,3,0,0);
-	Envelope e2(1, 0.5, 3, 0.5, 3 + 0.05, 0.5, 0.5);
+	Envelope e1(0,1,2,1,3,1,0);
+	Envelope e2(0.5, 1, 1.5, 1, 2, 0, 0.5);
 
 
-	this->op1 = Operator(1, 0.001,e1);
+	this->op1 = Operator(1, 0.004,e1);
 	this->op2 = Operator(4, 1,e2);
 	
 	this->cas = Cascade();
@@ -26,6 +26,9 @@ MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),
 	this->inst.appendCas(&this->cas);
 
 	this->mixer.setInstrument(&this->inst);
+
+
+	PaStreamer::init(inst);
 
 }
 
@@ -37,10 +40,6 @@ MainWin::~MainWin()
 
 void MainWin::render()
 {
-	if (!resetKeyTime) {
-		KeysInput::refreshPrevTime();
-		this->resetKeyTime = true;
-	}
 
 	
 
@@ -75,7 +74,6 @@ void MainWin::render()
 	ImGui::Text(msg.c_str());
 	ImGui::Text(msg2.c_str());
 
-
 	
 	/*if (!fc_1.onWork() && !fc_2.onWork() && !fc_3.onWork())
 	{
@@ -104,7 +102,7 @@ void MainWin::render()
 		}
 	}*/
 
-	KeysInput::update();
+	//KeysInput::update();
 
 
 	//
@@ -125,8 +123,8 @@ void MainWin::render()
 	ImPlot::PlotLine("wav", x_range, wav, pBuffer->samples);
 	ImPlot::EndPlot();
 
-	this->source.queueBuffer(pBuffer);
-	this->source.stream();
+	//this->source.queueBuffer(pBuffer);
+	//this->source.stream();
 
 	
 

@@ -14,6 +14,7 @@ public:
 	void playBuffer(vered::buffer16 buffer);
 	void queueBuffer(vered::buffer16 * buffer);
 	void stream();
+	ALuint status();
 private:
 
 	bool firstQue = true;

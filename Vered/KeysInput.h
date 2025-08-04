@@ -15,6 +15,7 @@ public:
 	static const double & getDelta();
 
 	static void update();
+	static void update(double delta);
 
 
 private:
@@ -24,11 +25,19 @@ private:
 	static double keys_release[24];
 	
 	static int charToImgui(char key);
+	static void updatePressed();
+	static bool hasReleased(int index);
+	static bool isPressed(int index);
 	
 	static bool firstUse;
 
 	static std::chrono::time_point<std::chrono::steady_clock> prevTime;
 
 	static double delta;
+
+	static bool cPressed[24];
+	static bool pPressed[24];
+
+	static const char * keys;
 };
 

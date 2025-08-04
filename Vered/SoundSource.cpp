@@ -59,6 +59,14 @@ void SoundSource::queueBuffer(vered::buffer16 * buffer16)
 	this->bQueue.push(buffer16);
 }
 
+ALuint SoundSource::status()
+{
+	ALint playing;
+	alGetSourcei(this->source, AL_SOURCE_STATE,&playing);
+
+	return playing;
+}
+
 void SoundSource::stream()
 {
 
@@ -157,15 +165,11 @@ void SoundSource::stream()
 				ALint atQue = 0;
 				alGetSourcei(this->source, AL_BUFFERS_QUEUED, &atQue);
 
-				if (atQue > this->queued*2) {
+				if (atQue >= this->queued) {
 
 					alSourcePlay(this->source);
 				}
 			}
-		}
-		else
-		{
-			//std::cout << this->queued << " : Almost!" << std::endl;
 		}
 
 		

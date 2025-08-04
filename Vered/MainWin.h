@@ -34,8 +34,6 @@ private:
 	bool havePlayed = false;
 	bool resetKeyTime = false;
 
-	SoundSource source;
-
 	int bCount = 0;
 };
 
