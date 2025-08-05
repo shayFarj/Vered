@@ -8,7 +8,6 @@ Cascade::Cascade()
 
 Cascade::~Cascade()
 {
-
 }
 
 double Cascade::Output(double freq, double time,double release)

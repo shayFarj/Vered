@@ -21,6 +21,7 @@ private:
 	Cascade cas;
 	Cascade cas2;
 
+	Operator op3;
 	Operator op1;
 	Operator op2;
 

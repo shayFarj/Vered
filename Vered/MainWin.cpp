@@ -15,14 +15,18 @@ MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),
 	// modulation index 0.001 correlates to 40 total level in deflemask
 	Envelope e1(0,1,2,1,3,1,0);
 	Envelope e2(0.5, 1, 1.5, 1, 2, 0, 0.5);
+	Envelope e3(0, 0.5, 2, 0.5, 3, 0.5, 0);
 
 
 	this->op1 = Operator(1, 0.004,e1);
 	this->op2 = Operator(4, 1,e2);
+	this->op3 = Operator(2, 0.001, e3);
 	
 	this->cas = Cascade();
 	this->cas.Append(&op1);
+	this->cas.Append(&op3);
 	this->cas.Append(&op2);
+	
 	this->inst.appendCas(&this->cas);
 
 	this->mixer.setInstrument(&this->inst);
