@@ -20,7 +20,7 @@ PaStreamer::PaStreamer()
 
 PaStreamer::~PaStreamer()
 {
-    Pa_Sleep(5000);
+    Pa_Sleep(200);
 	Pa_StopStream(PaStreamer::stream);
 	Pa_CloseStream(PaStreamer::stream);
     Pa_Terminate();
@@ -40,7 +40,7 @@ void PaStreamer::init(Instrument inst)
         2,          /* stereo output */
         paFloat32,  /* 32 bit floating point output */
         PaStreamer::sampleRate,
-        16,        /* frames per buffer, i.e. the number
+        1,        /* frames per buffer, i.e. the number
                            of sample frames that PortAudio will
                            request from the callback. Many apps
                            may want to use
