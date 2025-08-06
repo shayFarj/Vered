@@ -1,7 +1,7 @@
 #pragma once
 #include "Envelope.h"
-
-
+#include <vector>
+class Cascade;
 class Operator
 {
 public:
@@ -14,6 +14,8 @@ public:
 
 	
 	double modulated(double freq,double time,double release, Operator* end= nullptr);
+	double modulated(double freq, double time, double release,std::vector<Cascade*>& cList, Operator* end = nullptr);
+
 	double Output(double freq, double time, double release);
 
 
@@ -26,7 +28,10 @@ private:
 	double mod_index;
 
 	double cos_phase(double freq, double time,double release,Operator * end = nullptr);
+	double cos_phase(double freq, double time, double release, std::vector<Cascade*>& cList, Operator* end = nullptr);
+
 	double sin_phase(double freq, double time,double release, Operator * end = nullptr);
+	double sin_phase(double freq, double time, double release,std::vector<Cascade*>& cList, Operator* end = nullptr);
 
 	Envelope env;
 

@@ -11,11 +11,17 @@ public:
 
 	void Append(Operator* carrier);
 
+	double sin_phase(double freq, double time, double release);
+	double cos_phase(double freq, double time, double release);
+
+	void appendCas(Cascade* cas);
+	void popCas(Cascade* cas);
+
 private:
 	Operator* carrier = nullptr;
 	Operator* tail = nullptr;
 
-	Cascade * in = nullptr;
+	std::vector<Cascade*> in;
 
 
 };

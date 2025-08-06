@@ -32,7 +32,7 @@ LiveMixer::~LiveMixer()
 vered::buffer16 LiveMixer::getBufferMono16(int sample_rate)
 {
 
-	int samples = (int)(floor(this->delta * sample_rate)) * 2;
+	int samples = (int)(floor(0.001 * sample_rate)) * 2;
 	samples -= samples % 4;
 
 	short* buffer = new short[samples];

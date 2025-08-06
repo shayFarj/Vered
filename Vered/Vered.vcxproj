@@ -150,6 +150,7 @@
     <ClCompile Include="Envelope.cpp" />
     <ClCompile Include="example_glfw_opengl3\main.cpp" />
     <ClCompile Include="FourierCalc.cpp" />
+    <ClCompile Include="InstBoard.cpp" />
     <ClCompile Include="Instrument.cpp" />
     <ClCompile Include="KeysInput.cpp" />
     <ClCompile Include="LiveMixer.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Cascade.h" />
     <ClInclude Include="Envelope.h" />
     <ClInclude Include="FourierCalc.h" />
+    <ClInclude Include="InstBoard.h" />
     <ClInclude Include="Instrument.h" />
     <ClInclude Include="KeysInput.h" />
     <ClInclude Include="LiveMixer.h" />

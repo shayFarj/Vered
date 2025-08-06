@@ -17,15 +17,34 @@ MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),
 	Envelope e2(0.5, 1, 1.5, 1, 2, 0, 0.5);
 	Envelope e3(0, 0.5, 2, 0.5, 3, 0.5, 0);
 
+	//~
+	Envelope e4(0, 1, 1,1, 2, 1, 0);
+	Envelope e5(0, 1, 1, 1, 2, 1, 0);
+	this->op4 = Operator(1, 0.005, e4);
+	this->op5 = Operator(2, 0.005, e4);
+
+	this->cas2 = Cascade();
+	this->cas3 = Cascade();
+
+	this->cas2.Append(&this->op4);
+	this->cas3.Append(&this->op5);
+
+	
+
+	//~
+
 
 	this->op1 = Operator(1, 0.004,e1);
 	this->op2 = Operator(4, 1,e2);
 	this->op3 = Operator(2, 0.001, e3);
 	
 	this->cas = Cascade();
-	this->cas.Append(&op1);
-	this->cas.Append(&op3);
+	//this->cas.Append(&op1);
+	//this->cas.Append(&op3);
 	this->cas.Append(&op2);
+
+	this->cas.appendCas(&this->cas2);
+	this->cas.appendCas(&this->cas3);
 	
 	this->inst.appendCas(&this->cas);
 
@@ -123,13 +142,32 @@ void MainWin::render()
 		wav[i] = (double)pBuffer->buffer[i];
 	}
 
-	ImPlot::BeginPlot("wave");
-	ImPlot::PlotLine("wav", x_range, wav, pBuffer->samples);
-	ImPlot::EndPlot();
+	if (ImGui::BeginTable("table1",5, ImGuiTableFlags_Borders))
+	{
+		for (int row = 0; row < 4; row++)
+		{
+			ImGui::TableNextRow();
+			for (int column = 0; column < 3; column++)
+			{
+				ImGui::TableSetColumnIndex(column);
+				ImGui::Text("Row %d Column %d", row, column);
+				if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
+					ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, IM_COL32(255, 0, 0, 255));
+					
+				}
+				
+			}
+		}
+		ImGui::EndTable();
+	}
 
-	//this->source.queueBuffer(pBuffer);
-	//this->source.stream();
-
+	if (ImPlot::BeginPlot("wave"))
+	{
+		ImPlot::PlotLine("ee", x_range, wav,pBuffer->samples);
+		ImPlot::EndPlot();
+		//this->source.queueBuffer(pBuffer);
+		//this->source.stream();
+	}
 	
 
 	ImGui::PopStyleColor();

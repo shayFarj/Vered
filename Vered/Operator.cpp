@@ -1,4 +1,5 @@
 #include "Operator.h"
+#include "Cascade.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <iostream>
@@ -40,11 +41,63 @@ double Operator::sin_phase(double freq, double time,double release,Operator * en
 		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * sin(2 * M_PI * (freq * this->mult * (time + release)));
 }
 
+double Operator::sin_phase(double freq, double time, double release,std::vector<Cascade*>& cList, Operator* end)
+{
+	if (this->in != nullptr && this != end)
+		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * sin(2 * M_PI * (freq * this->mult * (time + release) + this->in->cos_phase(freq, time, release,cList, end)));
+	else
+	{
+		double inPhase = 0;
+
+		for (Cascade* c : cList)
+		{
+			inPhase += c->cos_phase(freq, time, release);
+		}
+
+		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * sin(2 * M_PI * (freq * this->mult * (time + release) + inPhase));
+	}
+}
+
+double Operator::cos_phase(double freq, double time, double release, std::vector<Cascade*>& cList, Operator* end)
+{
+	if (this->in != nullptr && this != end)
+		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * sin(2 * M_PI * (freq * this->mult * (time + release) + this->in->cos_phase(freq, time, release,cList, end)));
+	else
+	{
+		double inPhase = 0;
+
+		for (Cascade* c : cList)
+		{
+			inPhase += c->sin_phase(freq, time, release);
+		}
+
+		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * sin(2 * M_PI * (freq * this->mult * (time + release) + inPhase));
+	}
+}
+
 double Operator::modulated(double freq, double time,double release,Operator* end)
 {
 	if (this->in != nullptr && this != end)
 		return this->env.calc(time, release) * sin(2 * M_PI * (freq * this->mult * (release + time) + this->in->cos_phase(freq, time,release,end)));
 	else
 		return this->env.calc(time, release) * this->Output(freq, time,release);
+}
+
+double Operator::modulated(double freq, double time, double release, std::vector<Cascade*>& cList, Operator* end)
+{
+	if (this->in != nullptr && this != end)
+		return this->env.calc(time, release) * sin(2 * M_PI * (freq * this->mult * (release + time) + this->in->cos_phase(freq, time, release,cList, end)));
+	else
+
+	{
+		double inPhase = 0;
+
+		for (Cascade* c : cList)
+		{
+			inPhase += c->cos_phase(freq, time, release);
+		}
+
+		return this->env.calc(time, release) * sin(2 * M_PI * (freq * this->mult * (release + time) + inPhase));
+	}
 }
 
