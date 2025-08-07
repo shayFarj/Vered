@@ -15,43 +15,51 @@ MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),
 	// modulation index 0.001 correlates to 40 total level in deflemask
 	Envelope e1(0,1,2,1,3,1,0);
 	Envelope e2(0.5, 1, 1.5, 1, 2, 0, 0.5);
-	Envelope e3(0, 0.5, 2, 0.5, 3, 0.5, 0);
+	
+	this->op1 = Operator(1, 0.001, e1);
+	this->op2 = Operator(2, 0.0005, e1);
+	this->op3 = Operator(1, 1, e2);
 
-	//~
-	Envelope e4(0, 1, 1,1, 2, 1, 0);
-	Envelope e5(0, 1, 1, 1, 2, 1, 0);
-	this->op4 = Operator(1, 0.005, e4);
-	this->op5 = Operator(2, 0.005, e4);
-
-	this->cas2 = Cascade();
-	this->cas3 = Cascade();
-
-	this->cas2.Append(&this->op4);
-	this->cas3.Append(&this->op5);
-
+	this->op4 = Operator(1, 0.001, e1);
+	this->op5 = Operator(2, 0.0005, e1);
+	this->op6 = Operator(1, 1, e2);
 	
 
-	//~
+	Cascade * cas = new Cascade;
 
+	*cas = Cascade();
 
-	this->op1 = Operator(1, 0.004,e1);
-	this->op2 = Operator(4, 1,e2);
-	this->op3 = Operator(2, 0.001, e3);
+	cas->Append(&op1);
+	cas->Append(&op2);
+	cas->Append(&op3);
+
+	this->cas2 = new Cascade;
+	this->cas3 = new Cascade;
+
+	*cas2 = Cascade();
+	*cas3 = Cascade();
+
+	cas2->Append(&op4);
+	cas2->Append(&op5);
+
+	cas3->Append(&op6);
+
+	cas3->appendCas(cas2);
+
+	this->inst1 = Instrument();
+
+	inst1.appendCas(cas);
 	
-	this->cas = Cascade();
-	//this->cas.Append(&op1);
-	//this->cas.Append(&op3);
-	this->cas.Append(&op2);
+	this->inst2 = Instrument();
 
-	this->cas.appendCas(&this->cas2);
-	this->cas.appendCas(&this->cas3);
-	
-	this->inst.appendCas(&this->cas);
+	inst2.appendCas(cas3);
 
-	this->mixer.setInstrument(&this->inst);
+	//this->inst.appendCas(&this->cas);
+
+	this->mixer.setInstrument(&inst2);
 
 
-	PaStreamer::init(inst);
+	PaStreamer::init(inst2);
 
 }
 
@@ -98,16 +106,16 @@ void MainWin::render()
 	ImGui::Text(msg2.c_str());
 
 	
-	/*if (!fc_1.onWork() && !fc_2.onWork() && !fc_3.onWork())
+	if (!fc_1.onWork() && !fc_2.onWork() /*&& !fc_3.onWork()*/)
 	{
 		if (ImGui::Button("begin"))
 		{
-			fc_1.init(this->inst,220,1000,0.0001,0,10);
-			fc_2.init(this->inst, 440, 1000, 0.0001, 0, 10);
-			fc_3.init(this->inst, 880, 1000, 0.0001, 0, 10);
+			fc_1.init(this->inst1,880,1000,0.0001,0,10);
+			fc_2.init(this->inst2, 880, 1000, 0.0001, 0, 10);
+			//fc_3.init(this->inst, 880, 1000, 0.0001, 0, 10);
 		}
 	}
-	if (fc_1.isReady() && fc_2.isReady() && fc_3.isReady())
+	if (fc_1.isReady() && fc_2.isReady() /*&& fc_3.isReady()*/)
 	{
 
 		ImGui::Text("It's ready!");
@@ -117,13 +125,14 @@ void MainWin::render()
 		}
 		if (this->showGraph)
 		{
-			ImPlot::BeginPlot("Fourier");
-			ImPlot::PlotLine("Fourier_220", fc_1.getRange(), fc_1.copyData(), fc_1.getDataLen());
-			ImPlot::PlotLine("Fourier_440", fc_2.getRange(), fc_2.copyData(), fc_2.getDataLen());
-			ImPlot::PlotLine("Fourier_880", fc_3.getRange(), fc_3.copyData(), fc_3.getDataLen());
-			ImPlot::EndPlot();
+			if (ImPlot::BeginPlot("Fourier")) {
+				ImPlot::PlotLine("Instrument1", fc_1.getRange(), fc_1.copyData(), fc_1.getDataLen());
+				ImPlot::PlotLine("Instrument2", fc_2.getRange(), fc_2.copyData(), fc_2.getDataLen());
+				//ImPlot::PlotLine("Fourier_880", fc_3.getRange(), fc_3.copyData(), fc_3.getDataLen());
+				ImPlot::EndPlot();
+			}
 		}
-	}*/
+	}
 
 	//KeysInput::update();
 

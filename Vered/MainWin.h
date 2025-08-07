@@ -18,13 +18,14 @@ private:
 
 	LiveMixer mixer;
 
-	Cascade cas;
+	Cascade * cas;
 
-	Cascade cas2;
-	Cascade cas3;
+	Cascade * cas2;
+	Cascade * cas3;
 
 	Operator op4;
 	Operator op5;
+	Operator op6;
 
 
 	Operator op3;
@@ -32,6 +33,9 @@ private:
 	Operator op2;
 
 	Instrument inst;
+
+	Instrument inst1;
+	Instrument inst2;
 
 	FourierCalc fc_1;
 	FourierCalc fc_2;
