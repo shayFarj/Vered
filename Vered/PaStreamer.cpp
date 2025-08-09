@@ -20,7 +20,7 @@ PaStreamer::PaStreamer()
 
 PaStreamer::~PaStreamer()
 {
-    Pa_Sleep(20);
+    Pa_Sleep(1);
 	Pa_StopStream(PaStreamer::stream);
 	Pa_CloseStream(PaStreamer::stream);
     Pa_Terminate();

@@ -18,10 +18,10 @@ private:
 
 	LiveMixer mixer;
 
-	Cascade * cas;
+	Cascade cas;
 
-	Cascade * cas2;
-	Cascade * cas3;
+	Cascade cas2;
+	Cascade cas3;
 
 	Operator op4;
 	Operator op5;

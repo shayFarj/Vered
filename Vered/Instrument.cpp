@@ -86,3 +86,4 @@ short* Instrument::getArray16Stereo(double freq, double base_time,double r_time,
 
 	return buffer;
 }
+

@@ -11,6 +11,7 @@ public:
 
 	void setInstrument(Instrument* inst);
 	vered::buffer16 getBufferMono16(int sample_rate);
+	vered::bufferDouble getDemoBufferMono(int sampleRate);
 
 private:
 	const double(&keys_press)[24];
