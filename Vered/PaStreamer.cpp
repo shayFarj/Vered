@@ -85,17 +85,22 @@ int PaStreamer::callback(const void* input,
     for (int i = 0; i < frameCount; i++)
     {
 
-        float frame = 0;
+        double frame = 0;
         for (int j = 0; j < 24; j++)
         {
-            float channel = 0;
-            if (release[j] > 0)
+            double channel = 0;
+            double p1 = press[j];
+
+            double r1 = release[j];
+
+            if (r1 > 0)
             {
-                channel = PaStreamer::inst.Output(110 * pow(2, j / 12.0), press[j], release[j] + i * delta) * 0.2;
+                channel = PaStreamer::inst.Output(110.0 * pow(2, j / 12.0), p1, r1 + i * delta) * 0.2;
             }
             else
             {
-                channel = PaStreamer::inst.Output(110 * pow(2, j / 12.0), press[j] + i * delta, 0) * 0.2;
+                if (p1 != 0)
+                    channel = PaStreamer::inst.Output(110.0 * pow(2, j / 12.0), p1 + i * delta, 0) * 0.2;
             }
 
 
@@ -104,16 +109,29 @@ int PaStreamer::callback(const void* input,
 
         }
 
-        ///*frame = sin(2 * M_PI * 440 * (time + delta * i));*/
-        //frame = PaStreamer::inst.Output(220, (time + delta * i), 0);
-
-
         *out = frame;
         out++;
         *out = frame;
         out++;
 
     }
+
+    //for (int i = 0; i < frameCount; i++)
+    //{
+
+    //    float frame = 0;
+    //    
+
+    //    //frame = cos(2 * M_PI * 440 * (time + delta * i));
+    //    frame = PaStreamer::inst.Output(220, (time + delta * i), 0);
+
+
+    //    *out = frame;
+    //    out++;
+    //    *out = frame;
+    //    out++;
+
+    //}
 
     PaStreamer::prevTime = time;
 

@@ -27,30 +27,13 @@ MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),
 
 
 	this->cas = Cascade();
-
-	this->cas.Append(&op1);
 	this->cas.Append(&op2);
+	//this->cas.Append(&op2);
 	this->cas.Append(&op3);
-
-	this->cas2 = Cascade();
-	this->cas3 = Cascade();
-
-	cas2.Append(&op4);
-	cas2.Append(&op5);
-
-	cas3.Append(&op6);
-
-	cas3.appendCas(&cas2);
-
+	
 	this->inst1 = Instrument();
 
-	inst1.appendCas(&cas);
-	
-	this->inst2 = Instrument();
-
-	inst2.appendCas(&cas3);
-	
-	//this->inst.appendCas(&this->cas);
+	this->inst1.appendCas(&this->cas);
 
 	this->mixer.setInstrument(&inst1);
 
