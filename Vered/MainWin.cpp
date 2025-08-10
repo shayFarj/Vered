@@ -52,10 +52,10 @@ MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),
 	
 	//this->inst.appendCas(&this->cas);
 
-	this->mixer.setInstrument(&inst2);
+	this->mixer.setInstrument(&inst1);
 
 
-	PaStreamer::init(inst2);
+	PaStreamer::init(inst1);
 
 }
 

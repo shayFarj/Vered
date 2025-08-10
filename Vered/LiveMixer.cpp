@@ -31,7 +31,7 @@ LiveMixer::~LiveMixer()
 
 vered::bufferDouble LiveMixer::getDemoBufferMono(int sampleRate)
 {
-	int samples = sampleRate/ 10;
+	int samples = sampleRate/ 100;
 	double* arr = new double[samples];
 
 	double* out = arr;

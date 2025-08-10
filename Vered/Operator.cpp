@@ -61,7 +61,7 @@ double Operator::sin_phase(double freq, double time, double release,std::vector<
 double Operator::cos_phase(double freq, double time, double release, std::vector<Cascade*>& cList, Operator* end)
 {
 	if (this->in != nullptr && this != end)
-		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * sin(2 * M_PI * (freq * this->mult * (time + release) + this->in->cos_phase(freq, time, release,cList, end)));
+		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * cos(2 * M_PI * (freq * this->mult * (time + release) + this->in->cos_phase(freq, time, release,cList, end)));
 	else
 	{
 		double inPhase = 0;
@@ -71,7 +71,7 @@ double Operator::cos_phase(double freq, double time, double release, std::vector
 			inPhase += c->sin_phase(freq, time, release);
 		}
 
-		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * sin(2 * M_PI * (freq * this->mult * (time + release) + inPhase));
+		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * cos(2 * M_PI * (freq * this->mult * (time + release) + inPhase));
 	}
 }
 
