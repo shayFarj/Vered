@@ -45,6 +45,7 @@ MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),
 
 	this->mixer.setInstrument(&inst1);
 
+	this->iBoard = InstBoard();
 
 	PaStreamer::init(inst1);
 
@@ -60,7 +61,7 @@ void MainWin::render()
 {
 
 	
-
+	
 	//if (!havePlayed)
 	//{
 	//	this->source.playBuffer(this->inst.getBuffer16Stereo(440,0,5,48000));
@@ -68,6 +69,8 @@ void MainWin::render()
 	//}
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.38, 0.0, 0.0, 1));
 	ImGui::PushStyleColor(ImGuiCol_TitleBgCollapsed, ImVec4(0.38, 0.0, 0.0, 0.5));
+
+	this->iBoard.render();
 
 	ImGui::Begin("Test");
 
@@ -140,24 +143,7 @@ void MainWin::render()
 		wav[i] = (double)pBuffer->buffer[i];
 	}
 
-	if (ImGui::BeginTable("table1",5, ImGuiTableFlags_Borders))
-	{
-		for (int row = 0; row < 4; row++)
-		{
-			ImGui::TableNextRow();
-			for (int column = 0; column < 3; column++)
-			{
-				ImGui::TableSetColumnIndex(column);
-				ImGui::Text("Row %d Column %d", row, column);
-				if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
-					ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, IM_COL32(255, 0, 0, 255));
-					
-				}
-				
-			}
-		}
-		ImGui::EndTable();
-	}
+	
 
 	if (ImPlot::BeginPlot("wave"))
 	{

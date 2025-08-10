@@ -71,6 +71,9 @@ void Cascade::popCas(Cascade* cas)
 	int i = 0;
 	for (i = 0; i < this->in.size() && this->in[i] != cas; i++);
 
-	if(i != this->in.size())
+	if (i != this->in.size())
+	{
+		delete this->in[i];
 		this->in.erase(this->in.begin() + i);
+	}
 }

@@ -6,6 +6,7 @@
 #include "SoundSource.h"
 #include "KeysInput.h"
 #include "LiveMixer.h"
+#include "InstBoard.h"
 
 class MainWin
 {
@@ -15,6 +16,7 @@ public:
 
 	void render();
 private:
+	InstBoard iBoard;
 
 	LiveMixer mixer;
 
