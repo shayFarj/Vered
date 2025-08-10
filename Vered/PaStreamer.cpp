@@ -138,22 +138,6 @@ int PaStreamer::callback(const void* input,
     time += delta * frameCount;
 
     KeysInput::update(delta * frameCount);
-    /*for (int i = 0; i < frameCount;i += 2)
-    {
-        float frame = 0;
-        for (int j = 0; j < 24; j++)
-        {
-            if (release[j] > 0)
-                frame += PaStreamer::inst.Output(220 * pow(2, j / 12.0), press[j], release[j] + delta * i) * 0.5;
-            else
-                frame += PaStreamer::inst.Output(220 * pow(2, j / 12.0), press[j] + delta * i, release[j]) * 0.5;
-        }
-
-        *out = frame;
-        out++;
-        *out = frame;
-        out++;
-    }*/
 
     return 0;
 }

@@ -17,19 +17,27 @@ MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),
 	Envelope e2(0, 1, 1.5, 1, 2, 0, 0.5);
 	
 	this->op1 = Operator(1, 0.001, e1);
-	this->op2 = Operator(2, 0.0005, e1);
+	this->op2 = Operator(2, 0.001, e1);
 	this->op3 = Operator(1, 1, e2);
 
 	this->op4 = Operator(1, 0.001, e1);
-	this->op5 = Operator(2, 0.0005, e1);
+	this->op5 = Operator(1, 0.001, e1);
 	this->op6 = Operator(1, 1, e2);
 	
 
-
 	this->cas = Cascade();
-	this->cas.Append(&op2);
-	//this->cas.Append(&op2);
-	this->cas.Append(&op3);
+	this->cas.Append(&this->op1);
+	this->cas.Append(&this->op3);
+
+	this->cas2 = Cascade();
+	this->cas2.Append(&this->op2);
+
+	this->cas3 = Cascade();
+	this->cas3.Append(&this->op5);
+	
+	this->cas.appendCas(&this->cas3);
+	this->cas.appendCas(&this->cas2);
+
 	
 	this->inst1 = Instrument();
 
