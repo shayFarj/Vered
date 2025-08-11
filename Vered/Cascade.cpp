@@ -58,7 +58,7 @@ void Cascade::appendCas(Cascade* cas)
 		if (!valid) break;
 	}
 	
-	if (!valid && cas == nullptr && cas != this) {
+	if (!valid || cas == nullptr || cas == this) {
 		throw("Invalid cascade appended");
 	}
 
@@ -66,14 +66,15 @@ void Cascade::appendCas(Cascade* cas)
 
 }
 
-void Cascade::popCas(Cascade* cas)
+void Cascade::popCas(Cascade* cas, bool del)
 {
 	int i = 0;
 	for (i = 0; i < this->in.size() && this->in[i] != cas; i++);
 
 	if (i != this->in.size())
 	{
-		delete this->in[i];
+		//if(del)
+		//	delete this->in[i];
 		this->in.erase(this->in.begin() + i);
 	}
 }

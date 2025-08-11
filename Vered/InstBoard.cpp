@@ -120,7 +120,6 @@ void InstBoard::render()
 			if (size > this->maxCol)
 				this->maxCol = size;
 			
-			std::cout << size + 1 << std::endl;
 		}
 		else
 		{
@@ -142,7 +141,7 @@ void InstBoard::render()
 			int farCol = this->cCol1 > this->cCol2 ? this->cCol1 : this->cCol2;
 			int farRow = this->cCol1 > this->cCol2 ? this->cRow1 : this->cRow2;
 
-			this->cells[closeCol][closeRow].cInput(&this->cells[farCol][farRow]);
+			this->cells[closeCol][closeRow].cEnsureInput(&this->cells[farCol][farRow]);
 		}
 	}
 
@@ -161,10 +160,46 @@ void InstBoard::render()
 				int farCol = this->cCol1 > this->cCol2 ? this->cCol1 : this->cCol2;
 				int farRow = this->cCol1 > this->cCol2 ? this->cRow1 : this->cRow2;
 
-				this->cells[closeCol][closeRow].dInput(&this->cells[farCol][farRow]);
+				this->cells[closeCol][closeRow].dEnsureInput(&this->cells[farCol][farRow]);
 			}
 		}
 	}
+
+	if (ImGui::Button("Delete red cascade"))
+	{
+		bool ifSelected = this->cCol1 != -1 && this->cRow1 != -1;
+		bool ifExists = (this->cCol1 < this->cells.size()) && (this->cRow1 < this->cells[cCol1].size());
+
+		if (ifExists&&ifSelected)
+		{
+			this->cells[this->cCol1][this->cRow1].Fire();
+
+			this->cells[this->cCol1].erase(this->cells[this->cCol1].begin() + this->cRow1);
+		}
+
+		this->maxCol = this->cells[0].size();
+		for (int i = 1; i < this->cells.size(); i++)
+			this->maxCol = this->maxCol > this->cells[i].size() ? this->maxCol : this->cells[i].size();
+	}
+
+	if (ImGui::Button("Delete blue cascade"))
+	{
+		bool ifSelected = this->cCol2 != -1 && this->cRow2 != -1;
+		bool ifExists = (this->cCol2 < this->cells.size()) && (this->cRow2 < this->cells[cCol2].size());
+
+		if (ifExists)
+		{
+			this->cells[this->cCol2][this->cRow2].Fire();
+
+			this->cells[this->cCol2].erase(this->cells[this->cCol2].begin() + this->cRow2);
+		}
+
+		this->maxCol = this->cells[0].size();
+		for (int i = 1; i < this->cells.size(); i++)
+			this->maxCol = this->maxCol > this->cells[i].size() ? this->maxCol : this->cells[i].size();
+	}
+
+	if(ImGui::Button)
 
 	ImGui::Text(this->errMsg.c_str());
 

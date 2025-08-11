@@ -29,47 +29,110 @@ namespace vered
 
 	struct casCell
 	{
+	private:
+
+
 	public:
 		casCell (Cascade* cas) : cas(cas)
 		{
 
 		}
 
-		void cInput(casCell* cCell)
+		void Fire()
 		{
-			bool valid = true;
 			for (int i = 0; i < this->in.size(); i++)
-			{
-				valid = this->in[i] != cCell;
-				if (!valid) break;
-			}
-
-			if (!valid || cCell == nullptr || cCell == this) {
-				std::cout << "invalid!" << std::endl;
-				return;
-			}
-
-			this->in.push_back(cCell);
-
-			this->cas->appendCas(cCell->cas);
-			std::cout << "Connected ! " << std::endl;
+				this->in[i]->dEnsureOutput(this);
+			for (int i = 0; i < this->out.size(); i++)
+				this->out[i]->dEnsureInput(this);
 		}
 
-		void dInput(casCell* cCell) {
+		void cEnsureOutput(casCell* cCell)
+		{
 			int i = 0;
-			for (i = 0; i < this->in.size() && this->in[i] != cCell; i++);
+			for (; i < cCell->in.size(); i++)
+				if (cCell->in[i] == this) break;
+		
 
-			if (i != this->in.size())
-			{
-				std::cout << "Disconnected ! " << std::endl;
-				this->in.erase(this->in.begin() + i);
+			if (i == cCell->in.size()) {
+				cCell->in.push_back(this);
+				cCell->cas->appendCas(this->cas);
 			}
-			else
-			{
-				std::cout << "Not connected already ! " << std::endl;
+				
+
+			int j = 0;
+
+			for (; j < this->out.size(); j++)
+				if (this->out[j] == cCell) break;
+
+			if (j == this->out.size()) this->out.push_back(cCell);
+			
+		}
+
+		void dEnsureOutput(casCell* cCell)
+		{
+			int i = 0;
+			for (; i < cCell->in.size(); i++)
+				if (cCell->in[i] == this) break;
+
+
+			if (i != cCell->in.size()) {
+				cCell->in.erase(cCell->in.begin() + i);
+				cCell->cas->popCas(this->cas);
+			}
+
+			int j = 0;
+
+			for (; j < this->out.size(); j++)
+				if (this->out[j] == cCell) break;
+
+			if (j != this->out.size()) {
+				this->out.erase(this->out.begin() + j);
 			}
 		}
 		
+		void cEnsureInput(casCell* cCell)
+		{
+			int i = 0;
+			for (; i < cCell->out.size(); i++)
+				if (cCell->out[i] == this) break;
+
+
+			if (i == cCell->out.size()) cCell->out.push_back(this);
+
+			int j = 0;
+
+			for (; j < this->in.size(); j++)
+				if (this->in[j] == cCell) break;
+
+			if (j == this->in.size()) {
+				this->in.push_back(cCell);
+				this->cas->appendCas(cCell->cas);
+			}
+			else
+				std::cout << "Ensured Input Connected Already!" << std::endl;
+		}
+		
+		void dEnsureInput(casCell* cCell)
+		{
+			int i = 0;
+			for (; i < cCell->out.size(); i++)
+				if (cCell->out[i] == this) break;
+
+
+			if (i != cCell->out.size()) cCell->out.erase(cCell->out.begin() + i);
+
+			int j = 0;
+
+			for (; j < this->in.size(); j++)
+				if (this->in[j] == cCell) break;
+
+			if (j != this->in.size()) {
+				this->in.erase(this->in.begin() + j);
+				this->cas->popCas(cCell->cas);
+			}
+			else
+				std::cout << "Ensured Input Disconnected Already!" << std::endl;
+		}
 
 		Cascade* cas = nullptr;
 		

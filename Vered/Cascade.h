@@ -15,7 +15,7 @@ public:
 	double cos_phase(double freq, double time, double release);
 
 	void appendCas(Cascade* cas);
-	void popCas(Cascade* cas);
+	void popCas(Cascade* cas,bool del = false);
 
 private:
 	Operator* carrier = nullptr;
