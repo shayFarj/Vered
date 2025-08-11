@@ -18,6 +18,8 @@ public:
 	void popCas(Cascade* cas,bool del = false);
 
 private:
+	friend class CasBoard;
+
 	Operator* carrier = nullptr;
 	Operator* tail = nullptr;
 

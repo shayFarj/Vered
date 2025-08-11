@@ -21,6 +21,7 @@ public:
 
 private:
 	friend class Cascade;
+	friend class CasBoard;
 
 	Operator* in = nullptr;
 
