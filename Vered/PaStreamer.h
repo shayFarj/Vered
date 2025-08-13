@@ -9,10 +9,13 @@ public:
 	PaStreamer();
 	~PaStreamer();
 
-	static void init(Instrument inst);
+	static void init(Instrument * inst);
+
+	static void pauseStream();
+	static void unpauseStream();
 
 private:
-	static Instrument inst;
+	static Instrument * inst;
 
 	static int sampleRate;
 

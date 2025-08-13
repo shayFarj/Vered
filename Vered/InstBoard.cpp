@@ -12,6 +12,11 @@ InstBoard::~InstBoard()
 
 }
 
+Instrument* InstBoard::getInst()
+{
+	return &this->inst;
+}
+
 void InstBoard::render()
 {
 	
@@ -148,17 +153,20 @@ void InstBoard::render()
 	if (ImGui::Button("Add to layer"))
 	{
 		if (this->sCol != -1) {
+			PaStreamer::pauseStream();
 			Cascade* cas = new Cascade;
 			*cas = Cascade();
 
 			vered::casCell nCell = vered::casCell(cas);
 
 			this->cells[this->sCol].push_back(nCell);
+			if (this->sCol == 0)
+				this->inst.appendCas(nCell.cas);
 
 			int size = this->cells[this->sCol].size();
 			if (size > this->maxCol)
 				this->maxCol = size;
-			
+			PaStreamer::unpauseStream();
 		}
 		else
 		{
@@ -174,6 +182,7 @@ void InstBoard::render()
 		bool ifExists = (this->cCol1 < this->cells.size()) && (this->cCol2 < this->cells.size()) && (this->cRow1 < this->cells[cCol1].size()) && (this->cRow2 < this->cells[cCol2].size());
 		if (ifExists && ifNeighbors && ifSelected)
 		{
+			PaStreamer::pauseStream();
 			int closeCol = this->cCol1 < this->cCol2 ? this->cCol1 : this->cCol2;
 			int closeRow = this->cCol1 < this->cCol2 ? this->cRow1 : this->cRow2;
 
@@ -181,6 +190,7 @@ void InstBoard::render()
 			int farRow = this->cCol1 > this->cCol2 ? this->cRow1 : this->cRow2;
 
 			this->cells[closeCol][closeRow].cEnsureInput(&this->cells[farCol][farRow]);
+			PaStreamer::unpauseStream();
 		}
 	}
 
@@ -188,6 +198,7 @@ void InstBoard::render()
 	{
 		if (this->cCol1 != -1 && this->cCol2 != -1 && this->cRow1 != -1 && this->cRow2 != -1)
 		{
+			PaStreamer::pauseStream();
 			bool ifSelected = this->cCol1 != -1 && this->cCol2 != -1 && this->cRow1 != -1 && this->cRow2 != -1;
 			bool ifNeighbors = abs(this->cCol1 - this->cCol2) == 1;
 			bool ifExists = (this->cCol1 < this->cells.size()) && (this->cCol2 < this->cells.size()) && (this->cRow1 < this->cells[cCol1].size()) && (this->cRow2 < this->cells[cCol2].size());
@@ -201,6 +212,7 @@ void InstBoard::render()
 
 				this->cells[closeCol][closeRow].dEnsureInput(&this->cells[farCol][farRow]);
 			}
+			PaStreamer::unpauseStream();
 		}
 	}
 
@@ -211,9 +223,16 @@ void InstBoard::render()
 
 		if (ifExists&&ifSelected)
 		{
+			PaStreamer::pauseStream();
 			this->cells[this->cCol1][this->cRow1].Fire();
 
+			if (this->cCol1 == 0)
+				this->inst.eraseCas(this->cRow1);
+			else
+				delete this->cells[this->cCol1][this->cRow1].cas;
+
 			this->cells[this->cCol1].erase(this->cells[this->cCol1].begin() + this->cRow1);
+			PaStreamer::unpauseStream();
 		}
 
 		this->maxCol = this->cells[0].size();
@@ -228,17 +247,21 @@ void InstBoard::render()
 
 		if (ifExists)
 		{
+			PaStreamer::pauseStream();
 			this->cells[this->cCol2][this->cRow2].Fire();
 
+			if (this->cCol2 == 0)
+				this->inst.eraseCas(this->cRow2);
+			else
+				delete this->cells[this->cCol2][this->cRow2].cas;
 			this->cells[this->cCol2].erase(this->cells[this->cCol2].begin() + this->cRow2);
+			PaStreamer::unpauseStream();
 		}
 
 		this->maxCol = this->cells[0].size();
 		for (int i = 1; i < this->cells.size(); i++)
 			this->maxCol = this->maxCol > this->cells[i].size() ? this->maxCol : this->cells[i].size();
 	}
-
-	if(ImGui::Button)
 
 	ImGui::Text(this->errMsg.c_str());
 

@@ -9,7 +9,7 @@ Operator::Operator(int mult, double mod_index,Envelope env) : mult(mult), mod_in
 
 }
 
-Operator::Operator(): mult(1),mod_index(0.0001),in(nullptr),env(0,1,2,1,3,1,0)
+Operator::Operator(): mult(1),mod_index(0.0001),in(nullptr),env(0,1,2,1,3,1,1)
 {
 	
 }

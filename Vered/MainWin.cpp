@@ -43,11 +43,13 @@ MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),
 
 	this->inst1.appendCas(&this->cas);
 
-	this->mixer.setInstrument(&inst1);
-
 	this->iBoard = InstBoard();
 
-	PaStreamer::init(inst1);
+	this->mixer.setInstrument(iBoard.getInst());
+
+	
+
+	PaStreamer::init(iBoard.getInst());
 
 }
 

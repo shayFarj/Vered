@@ -110,3 +110,34 @@ double Envelope::Interpol(double a_x,double a_y,double b_x,double b_y,double t)
 		return b_y;
 }
 
+double & Envelope::getA_X()
+{
+	return this->a_x;
+}
+double & Envelope::getA_Y()
+{
+	return this->a_y;
+}
+double & Envelope::getS_X()
+{
+	return this->s_x;
+}
+double & Envelope::getS_Y()
+{
+	return this->s_y;
+}
+double & Envelope::getD_X()
+{
+	return this->d_x;
+}
+double & Envelope::getD_Y()
+{
+	return this->d_y;
+}
+double & Envelope::getR()
+{
+	return this->r;
+}
+
+
+

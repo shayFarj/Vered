@@ -4,7 +4,7 @@
 #include "Instrument.h"
 #include <string>
 #include "CasBoard.h"
-
+#include "PaStreamer.h"
 class InstBoard
 {
 public:
@@ -13,7 +13,7 @@ public:
 	~InstBoard();
 
 	void render();
-
+	Instrument* getInst();
 	
 
 private:

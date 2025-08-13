@@ -7,11 +7,22 @@
 
 PaStream* PaStreamer::stream;
 int PaStreamer::sampleRate = 48000;
-Instrument PaStreamer::inst;
+Instrument * PaStreamer::inst;
 
 double PaStreamer::prevTime = 0;
 double PaStreamer::phase = 0;
 bool PaStreamer::first = true;
+
+void PaStreamer::pauseStream()
+{
+    Pa_Sleep(1);
+    Pa_StopStream(PaStreamer::stream);
+}
+
+void PaStreamer::unpauseStream()
+{
+    Pa_StartStream(PaStreamer::stream);
+}
 
 PaStreamer::PaStreamer()
 {
@@ -26,7 +37,7 @@ PaStreamer::~PaStreamer()
     Pa_Terminate();
 }
 
-void PaStreamer::init(Instrument inst)
+void PaStreamer::init(Instrument * inst)
 {
     PaError err = Pa_Initialize();
 
@@ -95,12 +106,12 @@ int PaStreamer::callback(const void* input,
 
             if (r1 > 0)
             {
-                channel = PaStreamer::inst.Output(110.0 * pow(2, j / 12.0), p1, r1 + i * delta) * 0.2;
+                channel = PaStreamer::inst->Output(110.0 * pow(2, j / 12.0), p1, r1 + i * delta) * 0.2;
             }
             else
             {
                 if (p1 != 0)
-                    channel = PaStreamer::inst.Output(110.0 * pow(2, j / 12.0), p1 + i * delta, 0) * 0.2;
+                    channel = PaStreamer::inst->Output(110.0 * pow(2, j / 12.0), p1 + i * delta, 0) * 0.2;
             }
 
 

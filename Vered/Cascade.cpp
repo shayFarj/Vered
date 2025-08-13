@@ -12,12 +12,18 @@ Cascade::~Cascade()
 
 double Cascade::Output(double freq, double time,double release)
 {
-	return this->carrier->modulated(freq,time,release,this->tail);
+	if (this->carrier != nullptr)
+		return this->carrier->modulated(freq, time, release, this->tail);
+	else
+		return 0;
 }
 
 double Cascade::modulated(double freq, double time,double release)
 {
-	return this->carrier->modulated(freq, time,release,this->in,this->tail);
+	if (this->carrier != nullptr)
+		return this->carrier->modulated(freq, time, release, this->in, this->tail);
+	else
+		return 0;
 }
 
 double Cascade::sin_phase(double freq, double time, double release)

@@ -13,6 +13,16 @@ public:
 	void setSustain(double x, double y);
 	void setRelease(double r);
 
+	double& getA_X();
+	double& getA_Y();
+
+	double& getS_X();
+	double& getS_Y();
+
+	double& getD_X();
+	double& getD_Y();
+
+	double& getR();
 
 private:
 	void initAttack(double x, double y);

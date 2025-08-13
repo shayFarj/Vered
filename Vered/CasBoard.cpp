@@ -1,5 +1,6 @@
 #include "CasBoard.h"
 #include "imgui.h"
+#include "ImPlot.h"
 
 CasBoard::CasBoard(const char * title):title(title)
 {
@@ -87,15 +88,75 @@ void CasBoard::render()
 			}
 		}
 
-		std::string chain = "";
+		/*std::string chain = "";
 		Operator* iter = this->cas->carrier;
 		while (iter != nullptr)
 		{
-		
+
 			chain += std::to_string((unsigned long long)iter) + " ";
 			iter = iter->in;
 		}
-		ImGui::Text(chain.c_str());
+		ImGui::Text(chain.c_str());*/
+
+		bool ifOpExists = this->sOp >= 0 && this->sOp < this->ops.size();
+		if (ifOpExists)
+		{
+			ImGui::Text("Selected Operator Settings:");
+			ImGui::InputInt("MULT", &(this->ops[this->sOp]->mult));
+			ImGui::InputDouble("MOD INDEX", &(this->ops[this->sOp]->mod_index));
+			
+			Envelope* env = &this->ops[this->sOp]->env;
+			double a_x = env->getA_X();
+			double a_y = env->getA_Y();
+
+			double s_x = env->getS_X();
+			double s_y = env->getS_Y();
+
+			double d_x = env->getD_X();
+			double d_y = env->getD_Y();
+
+			double r = env->getR();
+
+			if (ImPlot::BeginPlot("Envelope"))
+			{
+				
+
+				
+
+				ImPlot::PlotScatter("Attack", &a_x, &a_y, 1);
+				ImPlot::PlotScatter("Sustain", &s_x, &s_y, 1);
+				ImPlot::PlotScatter("Decay", &d_x, &d_y, 1);
+				
+				if (r != 0)
+				{
+					double r_x = d_x + (d_y / r);
+
+
+					double r_line_y[2] = { d_y,0 };
+
+					double r_line_x[2] = { d_x,r_x };
+
+
+					ImPlot::PlotLine("Release", r_line_x, r_line_y, 2);
+				}
+				ImPlot::EndPlot();
+			}
+
+			ImGui::InputDouble("a_x", &a_x);
+			ImGui::InputDouble("a_y", &a_y);
+			ImGui::InputDouble("d_x", &d_x);
+			ImGui::InputDouble("d_y", &d_y);
+			ImGui::InputDouble("s_x", &s_x);
+			ImGui::InputDouble("s_y", &s_y);
+			ImGui::InputDouble("r", &r);
+
+			env->setAttack(a_x, a_y);
+			env->setDecay(d_x, d_y);
+			env->setSustain(s_x, s_y);
+			env->setRelease(r);
+		}
+
+		
 	}
 
 
