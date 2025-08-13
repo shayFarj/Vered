@@ -3,6 +3,7 @@
 #include "structs.h"
 #include "Instrument.h"
 #include <string>
+#include "CasBoard.h"
 
 class InstBoard
 {
@@ -33,5 +34,8 @@ private:
 	std::string errMsg ="";
 
 	Instrument inst = Instrument();
+
+	CasBoard cBoardR = CasBoard("Red Cascade");
+	CasBoard cBoardB = CasBoard("Blue Cascade");
 };
 

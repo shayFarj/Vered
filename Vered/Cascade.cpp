@@ -66,6 +66,25 @@ void Cascade::appendCas(Cascade* cas)
 
 }
 
+void Cascade::switchOps(Operator* back, Operator* front, Operator* out)
+{
+	if (back == this->tail) {
+		this->tail = front;
+	}
+	if (front == this->carrier)
+		this->carrier = back;
+
+	if (out != nullptr)
+		out->in = back;
+
+	front->in = back->in;
+	back->in = front;
+
+	
+
+	
+}
+
 void Cascade::popCas(Cascade* cas, bool del)
 {
 	int i = 0;

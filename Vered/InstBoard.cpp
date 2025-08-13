@@ -62,17 +62,38 @@ void InstBoard::render()
 							swap = this->cRow2;
 							this->cRow2 = this->cRow1;
 							this->cRow1 = swap;
+
+							bool ifExistsR = (this->cCol1 < this->cells.size()) && (this->cRow1 < this->cells[cCol1].size());
+							bool ifExistsB = (this->cCol2 < this->cells.size()) && (this->cRow2 < this->cells[cCol2].size());
 							
+							if(ifExistsR)
+								this->cBoardR.setCas(this->cells[this->cCol1][this->cRow1].cas);
+							else
+								this->cBoardR.setCas(nullptr);
+							if(ifExistsB)
+								this->cBoardB.setCas(this->cells[this->cCol2][this->cRow2].cas);
+							else
+								this->cBoardB.setCas(nullptr);
+
 						}
 						else {
+							
 							this->cCol1 = column;
 							this->cRow1 = row - 1;
+
+							bool ifExistsR = (this->cCol1 < this->cells.size()) && (this->cRow1 < this->cells[cCol1].size());
+
+							if(ifExistsR)
+								this->cBoardR.setCas(this->cells[this->cCol1][this->cRow1].cas);
+							else
+								this->cBoardR.setCas(nullptr);
 						}
 					
 					}
 					if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
 						if (this->cCol2 == column && this->cRow2 == row - 1 || this->cCol1 == column && this->cRow1 == row - 1)
 						{
+
 							int swap = this->cCol2;
 							this->cCol2 = this->cCol1;
 							this->cCol1 = swap;
@@ -81,10 +102,28 @@ void InstBoard::render()
 							this->cRow2 = this->cRow1;
 							this->cRow1 = swap;
 
+							bool ifExistsR = (this->cCol1 < this->cells.size()) && (this->cRow1 < this->cells[cCol1].size());
+							bool ifExistsB = (this->cCol2 < this->cells.size()) && (this->cRow2 < this->cells[cCol2].size());
+
+							if(ifExistsB)
+								this->cBoardB.setCas(this->cells[this->cCol2][this->cRow2].cas);
+							else
+								this->cBoardB.setCas(nullptr);
+
+							if(ifExistsR)
+								this->cBoardR.setCas(this->cells[this->cCol1][this->cRow1].cas);
+							else
+								this->cBoardR.setCas(nullptr);
 						}
 						else {
 							this->cCol2 = column;
 							this->cRow2 = row - 1;
+
+							bool ifExistsB = (this->cCol2 < this->cells.size()) && (this->cRow2 < this->cells[cCol2].size());
+							if (ifExistsB)
+								this->cBoardB.setCas(this->cells[this->cCol2][this->cRow2].cas);
+							else
+								this->cBoardB.setCas(nullptr);
 						}
 					}
 
@@ -204,4 +243,7 @@ void InstBoard::render()
 	ImGui::Text(this->errMsg.c_str());
 
 	ImGui::End();
+
+	this->cBoardB.render();
+	this->cBoardR.render();
 }

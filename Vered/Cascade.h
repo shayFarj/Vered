@@ -20,6 +20,8 @@ public:
 private:
 	friend class CasBoard;
 
+	void switchOps(Operator * back,Operator * front, Operator* out);
+
 	Operator* carrier = nullptr;
 	Operator* tail = nullptr;
 
