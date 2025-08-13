@@ -59,6 +59,11 @@ MainWin::~MainWin()
 
 }
 
+void MainWin::shutdown()
+{
+	PaStreamer::pauseStream();
+}
+
 void MainWin::render()
 {
 

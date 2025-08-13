@@ -37,6 +37,15 @@ static void glfw_error_callback(int error, const char* description)
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
+
+MainWin win;
+
+static void glfw_quit_callback(GLFWwindow* gWin)
+{
+    win.shutdown();
+}
+
+
 // Main code
 int main(int, char**)
 {
@@ -79,7 +88,7 @@ int main(int, char**)
     float main_scale = ImGui_ImplGlfw_GetContentScaleForMonitor(glfwGetPrimaryMonitor()); // Valid on GLFW 3.3+ only
     GLFWwindow* window = glfwCreateWindow((int)(1280 * main_scale), (int)(800 * main_scale), "bababooey", nullptr, nullptr);
 
-    MainWin win;
+    
     
 
     //src.playBuffer();
@@ -89,6 +98,9 @@ int main(int, char**)
         return 1;
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1); // Enable vsync
+
+    //set quitting func
+    glfwSetWindowCloseCallback(window, glfw_quit_callback);
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();

@@ -15,6 +15,7 @@ public:
 	~MainWin();
 
 	void render();
+	void shutdown();
 private:
 	InstBoard iBoard;
 
