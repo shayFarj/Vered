@@ -85,10 +85,22 @@ void Cascade::switchOps(Operator* back, Operator* front, Operator* out)
 
 	front->in = back->in;
 	back->in = front;
-
 	
+}
 
-	
+void Cascade::deleteOp(Operator* op, Operator* out)
+{
+	if (out != nullptr)
+	{
+		out->in = op->in;
+	}
+
+	if (op == this->tail)
+		this->tail = out;
+	if (op == this->carrier)
+		this->carrier = op->in;
+
+	delete op;
 }
 
 void Cascade::popCas(Cascade* cas, bool del)

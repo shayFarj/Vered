@@ -1,6 +1,7 @@
 #include "CasBoard.h"
 #include "imgui.h"
 #include "ImPlot.h"
+#include "PaStreamer.h"
 
 CasBoard::CasBoard(const char * title):title(title)
 {
@@ -88,15 +89,7 @@ void CasBoard::render()
 			}
 		}
 
-		/*std::string chain = "";
-		Operator* iter = this->cas->carrier;
-		while (iter != nullptr)
-		{
-
-			chain += std::to_string((unsigned long long)iter) + " ";
-			iter = iter->in;
-		}
-		ImGui::Text(chain.c_str());*/
+		
 
 		bool ifOpExists = this->sOp >= 0 && this->sOp < this->ops.size();
 		if (ifOpExists)
@@ -168,10 +161,38 @@ void CasBoard::render()
 	}
 
 	if (this->cas != nullptr) {
+		std::string chain = "";
+		Operator* iter = this->cas->carrier;
+		while (iter != nullptr)
+		{
+
+			chain += std::to_string((unsigned long long)iter) + " ";
+			iter = iter->in;
+		}
+		ImGui::Text(chain.c_str());
+
 		if (ImGui::Button("Append Operator"))
 		{
 			this->ops.push_back(new Operator());
 			this->cas->Append(this->ops[this->ops.size() - 1]);
+		}
+		if (ImGui::Button("Delete Operator"))
+		{
+			if (this->sOp >= 0 && this->sOp < this->ops.size())
+			{
+				PaStreamer::pauseStream();
+				
+				if (this->sOp != this->ops.size() - 1)
+					this->cas->deleteOp(this->ops[this->sOp], this->ops[this->sOp + 1]);
+				else
+					this->cas->deleteOp(this->ops[this->sOp], nullptr);
+
+				this->ops.erase(this->ops.begin() + this->sOp);
+
+				this->sOp--;
+
+				PaStreamer::unpauseStream();
+			}
 		}
 	}
 
