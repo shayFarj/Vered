@@ -106,12 +106,12 @@ int PaStreamer::callback(const void* input,
 
             if (r1 > 0)
             {
-                channel = PaStreamer::inst->Output(110.0 * pow(2, j / 12.0), p1, r1 + i * delta) * 0.2;
+                channel = PaStreamer::inst->Output(130.81 * pow(2, j / 12.0), p1, r1 + i * delta) * 0.2;
             }
             else
             {
                 if (p1 != 0)
-                    channel = PaStreamer::inst->Output(110.0 * pow(2, j / 12.0), p1 + i * delta, 0) * 0.2;
+                    channel = PaStreamer::inst->Output(130.81 * pow(2, j / 12.0), p1 + i * delta, 0) * 0.2;
             }
 
 

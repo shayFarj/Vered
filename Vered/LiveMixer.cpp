@@ -93,11 +93,11 @@ vered::buffer16 LiveMixer::getBufferMono16(int sample_rate)
 
 		if (pDelta != 0)
 		{
-			iBuffer = this->inst->getArray16Stereo(110.0 * pow(2, i / 12.0), this->prev_press[i],0, samples, sample_rate);	
+			iBuffer = this->inst->getArray16Stereo(130.81 * pow(2, i / 12.0), this->prev_press[i],0, samples, sample_rate);
 		}
 		else
 		{
-			iBuffer = this->inst->getArray16Stereo(110.0 * pow(2, i / 12.0), this->prev_press[i], this->prev_release[i], samples, sample_rate, true);
+			iBuffer = this->inst->getArray16Stereo(130.81 * pow(2, i / 12.0), this->prev_press[i], this->prev_release[i], samples, sample_rate, true);
 		}
 
 		for (int j = 0; j < samples; j++)
