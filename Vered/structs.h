@@ -3,8 +3,13 @@
 #include <iostream>
 namespace vered
 {
+	const int pos_params = 2;
+	const int env_params = 7;
+	const int op_params = 2 + pos_params + env_params;
+
 	struct buffer16
 	{
+		
 	public:
 		buffer16(short* buffer, int samples, int sample_rate) : buffer(buffer), samples(samples), sample_rate(sample_rate)
 		{
@@ -36,6 +41,12 @@ namespace vered
 		casCell (Cascade* cas) : cas(cas)
 		{
 
+		}
+
+		void setPos(int column, int row)
+		{
+			this->row = row;
+			this->column = column;
 		}
 
 		void Fire()

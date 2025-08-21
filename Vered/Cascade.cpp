@@ -36,6 +36,21 @@ double Cascade::cos_phase(double freq, double time, double release)
 	return this->carrier->cos_phase(freq, time, release, this->in, this->tail);
 }
 
+void Cascade::Prepend(Operator* tail)
+{
+	if (this->carrier != nullptr)
+	{
+		tail->in = this->tail->in;
+		this->tail->in = tail;
+		this->tail = tail;
+	}
+	else
+	{
+		this->carrier = tail;
+		this->tail = tail;
+	}
+}
+
 void Cascade::Append(Operator* carrier)
 {
 	std::cout <<"Tail : " << this->tail << " Carrier : " << this->carrier << std::endl;
@@ -113,5 +128,18 @@ void Cascade::popCas(Cascade* cas, bool del)
 		//if(del)
 		//	delete this->in[i];
 		this->in.erase(this->in.begin() + i);
+	}
+}
+
+void Cascade::getData(std::string& content,std::string& pos)
+{
+
+	Operator* iter = this->carrier;
+	while (iter != nullptr)
+	{
+		content += pos;
+
+		iter->getData(content);
+		iter = iter->in;
 	}
 }

@@ -141,3 +141,27 @@ double & Envelope::getR()
 
 
 
+void Envelope::getData(std::string& content)
+{
+	content += std::to_string(this->getA_X());
+	content += ":";
+
+	content += std::to_string(this->getA_Y());
+	content += ":";
+
+	content += std::to_string(this->getS_X());
+	content += ":";
+
+	content += std::to_string(this->getS_Y());
+	content += ":";
+
+	content += std::to_string(this->getD_X());
+	content += ":";
+
+	content += std::to_string(this->getD_Y());
+	content += ":";
+
+	content += std::to_string(this->getR());
+	content += ":";
+
+}

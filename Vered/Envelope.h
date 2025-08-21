@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+
 class Envelope
 {
 public:
@@ -23,6 +25,8 @@ public:
 	double& getD_Y();
 
 	double& getR();
+
+	void getData(std::string&content);
 
 private:
 	void initAttack(double x, double y);

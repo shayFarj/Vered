@@ -2,6 +2,7 @@
 #include <imgui.h>
 #include "structs.h"
 #include <iostream>
+#include "Files.h";
 
 InstBoard::InstBoard()
 {
@@ -53,7 +54,7 @@ void InstBoard::render()
 				{
 					ImGui::TableSetColumnIndex(column);
 					if(this->cells[column].size() > row - 1)
-						ImGui::Text("Cascade  %d : %d", row, column);
+						ImGui::Text("Cascade  %d : %d", this->cells[column][row-1].column, this->cells[column][row - 1].row);
 					else
 						ImGui::Text("Empty");
 
@@ -158,6 +159,7 @@ void InstBoard::render()
 			*cas = Cascade();
 
 			vered::casCell nCell = vered::casCell(cas);
+			nCell.setPos(this->sCol, this->cells[this->sCol].size());
 
 			this->cells[this->sCol].push_back(nCell);
 			if (this->sCol == 0)
@@ -234,7 +236,11 @@ void InstBoard::render()
 
 			this->cells[this->cCol1].erase(this->cells[this->cCol1].begin() + this->cRow1);
 			PaStreamer::unpauseStream();
+			for (int i = this->cRow1; i < this->cells[this->cCol1].size(); i++)
+				this->cells[this->cCol1][i].setPos(this->cCol1, i);
 		}
+
+		
 
 		this->maxCol = this->cells[0].size();
 		for (int i = 1; i < this->cells.size(); i++)
@@ -258,11 +264,44 @@ void InstBoard::render()
 			this->cBoardB.setCas(nullptr);
 			this->cells[this->cCol2].erase(this->cells[this->cCol2].begin() + this->cRow2);
 			PaStreamer::unpauseStream();
+			for (int i = this->cRow2; i < this->cells[this->cCol2].size(); i++)
+				this->cells[this->cCol2][i].setPos(this->cCol2, i);
 		}
+
+		
 
 		this->maxCol = this->cells[0].size();
 		for (int i = 1; i < this->cells.size(); i++)
 			this->maxCol = this->maxCol > this->cells[i].size() ? this->maxCol : this->cells[i].size();
+	}
+	if (ImGui::Button("Save Instrument"))
+	{
+		Files::saveTable(this->cells, "C:\\Users\\Farjoon\\Downloads\\caca\\baba.txt");
+	}
+
+	if (ImGui::Button("Load Instrument"))
+	{
+		PaStreamer::pauseStream();
+		
+		this->inst.clear();
+
+		this->cells.clear();
+		/*this->cBoardB.setCas(nullptr);
+		this->cBoardR.setCas(nullptr);
+
+		this->cCol1 = -1;
+		this->cCol2 = -1;
+		this->cRow1 = -1;
+		this->cRow2 = -1;*/
+
+		//this->cells = Files::loadTable("C:\\Users\\Farjoon\\Downloads\\caca\\baba.txt");
+
+		//if(this->cells.size() > 0)
+		//	for (int i = 0; i < this->cells[0].size(); i++)
+		//		this->inst.appendCas(this->cells[0][i].cas);
+		//
+		PaStreamer::unpauseStream();
+
 	}
 
 	ImGui::Text(this->errMsg.c_str());

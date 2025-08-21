@@ -29,6 +29,11 @@ void Instrument::eraseCas(int index)
 	this->cas.erase(this->cas.begin() + index);
 }
 
+void Instrument::clear()
+{
+	this->cas.clear();
+}
+
 
 double Instrument::Output(double freq, double time,double release)
 {

@@ -1,6 +1,7 @@
 #pragma once
 #include "Envelope.h"
 #include <vector>
+#include <string>
 class Cascade;
 class Operator
 {
@@ -18,7 +19,7 @@ public:
 
 	double Output(double freq, double time, double release);
 
-
+	void getData(std::string& content);
 private:
 	friend class Cascade;
 	friend class CasBoard;

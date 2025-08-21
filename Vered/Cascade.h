@@ -1,5 +1,7 @@
 #pragma once
 #include "Operator.h"
+#include <string>
+
 class Cascade
 {
 public:
@@ -10,12 +12,15 @@ public:
 	double modulated(double freq, double time,double release);
 
 	void Append(Operator* carrier);
+	void Prepend(Operator* tail);
 
 	double sin_phase(double freq, double time, double release);
 	double cos_phase(double freq, double time, double release);
 
 	void appendCas(Cascade* cas);
 	void popCas(Cascade* cas,bool del = false);
+
+	void getData(std::string& content,std::string& pos);
 
 private:
 	friend class CasBoard;

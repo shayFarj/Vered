@@ -16,6 +16,7 @@ Operator::Operator(): mult(1),mod_index(0.0001),in(nullptr),env(0,1,2,1,3,1,1)
 
 Operator::~Operator()
 {
+
 }
 
 
@@ -101,3 +102,11 @@ double Operator::modulated(double freq, double time, double release, std::vector
 	}
 }
 
+void Operator::getData(std::string& content)
+{
+	content += std::to_string(this->mult);
+	content += ":";
+	content += std::to_string(this->mod_index);
+	content += ":";
+	this->env.getData(content);
+}
