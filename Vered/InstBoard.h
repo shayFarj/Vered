@@ -32,6 +32,8 @@ private:
 	int sCol = -1;
 
 	std::string errMsg ="";
+	std::string filepath = "";
+	std::string fileErr = "";
 
 	Instrument inst = Instrument();
 

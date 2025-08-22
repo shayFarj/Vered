@@ -1,8 +1,10 @@
 #include "InstBoard.h"
 #include <imgui.h>
+#include "imgui_stdlib.h"
 #include "structs.h"
 #include <iostream>
 #include "Files.h";
+#include <fstream>
 
 InstBoard::InstBoard()
 {
@@ -275,37 +277,62 @@ void InstBoard::render()
 		for (int i = 1; i < this->cells.size(); i++)
 			this->maxCol = this->maxCol > this->cells[i].size() ? this->maxCol : this->cells[i].size();
 	}
+
+	ImGui::InputText("Instrument Filepath", &this->filepath);
+
+	
+
 	if (ImGui::Button("Save Instrument"))
 	{
-		Files::saveTable(this->cells, "C:\\Users\\Farjoon\\Downloads\\caca\\baba.txt");
+		std::ifstream file(filepath);
+		if (file)
+		{
+			Files::saveTable(this->cells, this->filepath.c_str());
+			this->fileErr = "";
+		}
+		else
+		{
+			this->fileErr = "Invalid filepath";
+		}
 	}
 
 	if (ImGui::Button("Load Instrument"))
 	{
-		PaStreamer::pauseStream();
-		
-		this->inst.clear();
+		std::ifstream file(filepath);
+		if (file) {
+			this->fileErr = "";
+			PaStreamer::pauseStream();
 
-		this->cells.clear();
-		
-		this->cells = Files::loadTable("C:\\Users\\Farjoon\\Downloads\\caca\\baba.txt");
+			this->inst.clear();
 
-		if (this->cells.size() != 0) {
-			for (int i = 0; i < this->cells[0].size(); i++)
-			{
-				this->inst.appendCas(this->cells[0][i].cas);
+			this->cells.clear();
+
+			this->cells = Files::loadTable(this->filepath.c_str());
+
+			if (this->cells.size() != 0) {
+				for (int i = 0; i < this->cells[0].size(); i++)
+				{
+					this->inst.appendCas(this->cells[0][i].cas);
+				}
+
+				this->maxCol = this->cells[0].size();
+				for (int i = 1; i < this->cells.size(); i++)
+					this->maxCol = this->maxCol > this->cells[i].size() ? this->maxCol : this->cells[i].size();
 			}
+			else
+				this->maxCol = 0;
 
-			this->maxCol = this->cells[0].size();
-			for (int i = 1; i < this->cells.size(); i++)
-				this->maxCol = this->maxCol > this->cells[i].size() ? this->maxCol : this->cells[i].size();
+			PaStreamer::unpauseStream();
 		}
 		else
-			this->maxCol = 0;
+		{
+			this->fileErr = "Invalid filepath";
+		}
 
-		PaStreamer::unpauseStream();
-
+		
 	}
+
+	ImGui::Text(this->fileErr.c_str());
 
 	ImGui::Text(this->errMsg.c_str());
 

@@ -1,12 +1,14 @@
 #include "Files.h"
 #include <fstream>
 #include <sstream>
+#include <filesystem>
 
 std::vector<std::vector<vered::casCell>> Files::loadTable(const char* filepath)
 {
 
+	std::vector<std::vector<vered::casCell>> table;
+	
 	std::ifstream file(filepath);
-
 	
 	std::string ops_str;
 	std::string cons_str;
@@ -17,8 +19,6 @@ std::vector<std::vector<vered::casCell>> Files::loadTable(const char* filepath)
 
 	std::stringstream ops(ops_str);
 	std::stringstream cons(cons_str);
-
-	std::vector<std::vector<vered::casCell>> table;
 
 	double opData[vered::op_params];
 
@@ -74,43 +74,45 @@ void Files::saveTable(std::vector<std::vector<vered::casCell>> table,const char*
 {
 	std::string content = "";
 
-	for (int i = 0; i < table.size(); i++)
-	{
-		for (int j = 0; j < table[i].size(); j++)
+	if (table.size() > 0) {
+		for (int i = 0; i < table.size(); i++)
 		{
-			std::string pos = "";
-			pos += std::to_string(i);
-			pos += ":";
-			pos += std::to_string(j);
-			pos += ":";
-
-			table[i][j].cas->getData(content,pos);
-		}
-	}
-
-	content += ";";
-
-	for (int i = 0; i < table.size() - 1; i++)
-	{
-		for (int j = 0; j < table[i].size(); j++)
-		{
-			for (vered::casCell* cell : table[i][j].in)
+			for (int j = 0; j < table[i].size(); j++)
 			{
-				content += std::to_string(i);
-				content += ":";
-				content += std::to_string(j);
-				content += ":";
+				std::string pos = "";
+				pos += std::to_string(i);
+				pos += ":";
+				pos += std::to_string(j);
+				pos += ":";
 
-				content += std::to_string(cell->column);
-				content += ":";
-				content += std::to_string(cell->row);
-				content += ":";
+				table[i][j].cas->getData(content, pos);
 			}
 		}
-	}
 
-	std::ofstream file(filepath);
-	file << content;
-	file.close();
+		content += ";";
+
+		for (int i = 0; i < table.size() - 1; i++)
+		{
+			for (int j = 0; j < table[i].size(); j++)
+			{
+				for (vered::casCell* cell : table[i][j].in)
+				{
+					content += std::to_string(i);
+					content += ":";
+					content += std::to_string(j);
+					content += ":";
+
+					content += std::to_string(cell->column);
+					content += ":";
+					content += std::to_string(cell->row);
+					content += ":";
+				}
+			}
+		}
+
+		std::ofstream file(filepath);
+		file << content;
+		file.close();
+	}
 }
 

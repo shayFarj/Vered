@@ -71,7 +71,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)vendor/imgui/backends;$(ProjectDir)vendor/imgui/;$(ProjectDir)vendor/imgui/libs/glfw/include;$(ProjectDir)vendor/implot;$(ProjectDir)vendor/OIS-1.5.1/includes;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)vendor/imgui/backends;$(ProjectDir)vendor/imgui/;$(ProjectDir)vendor/imgui/libs/glfw/include;$(ProjectDir)vendor/implot;$(ProjectDir)vendor/imgui/misc/cpp;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(ProjectDir)vendor/imgui;$(ProejctDir)vendor/imgui/backends;$(ProjectDir)vendor/implot;$(ProjectDir)vendor/imgui/libs/glfw/include;$(ProjectDir)vendor/imgui/misc/cpp;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -128,6 +131,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>$(ProjectDir)vendor/imgui/libs/glfw/lib-vc2010-64/glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
