@@ -291,7 +291,7 @@ void InstBoard::render()
 		this->cells = Files::loadTable("C:\\Users\\Farjoon\\Downloads\\caca\\baba.txt");
 
 		if (this->cells.size() != 0) {
-			for (int i = 0; i < this->cells.size(); i++)
+			for (int i = 0; i < this->cells[0].size(); i++)
 			{
 				this->inst.appendCas(this->cells[0][i].cas);
 			}
