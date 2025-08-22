@@ -1,11 +1,39 @@
 #include "Envelope.h"
 #include <iostream>
+Envelope::Envelope():a_x(0),a_y(1),s_x(2),s_y(1),d_x(3),d_y(1),r(1)
+{
+}
+
 Envelope::Envelope(double a_x, double a_y, double s_x, double s_y, double d_x, double d_y, double r)
 {
 	this->initAttack(a_x, a_y);
 	this->initSustain(s_x, s_y);
 	this->setDecay(d_x, d_y);
 	this->setRelease(r);
+}
+
+Envelope::Envelope(Envelope& rhs)
+{
+	this->a_x = rhs.a_x;
+	this->a_y = rhs.a_y;
+	this->s_x = rhs.s_x;
+	this->s_y = rhs.s_y;
+	this->d_x = rhs.d_x;
+	this->d_y = rhs.d_y;
+	this->r = rhs.r;
+}
+
+Envelope& Envelope::operator=(Envelope& rhs)
+{
+	this->a_x = rhs.a_x;
+	this->a_y = rhs.a_y;
+	this->s_x = rhs.s_x;
+	this->s_y = rhs.s_y;
+	this->d_x = rhs.d_x;
+	this->d_y = rhs.d_y;
+	this->r = rhs.r;
+
+	return *this;
 }
 
 Envelope::~Envelope()

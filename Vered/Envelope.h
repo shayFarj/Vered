@@ -6,6 +6,11 @@ class Envelope
 public:
 
 	Envelope(double a_x,double a_y, double s_x,double s_y,double d_x,double d_y,double r);
+	Envelope(Envelope& rhs);
+	Envelope();
+
+	Envelope& operator=(Envelope& rhs);
+
 	~Envelope();
 
 	double calc(double time,double release);

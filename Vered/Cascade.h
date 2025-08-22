@@ -7,6 +7,8 @@ class Cascade
 public:
 	Cascade();
 	~Cascade();
+	Cascade(Cascade& rhs);
+	Cascade& operator=(Cascade& rhs);
 
 	double Output(double freq, double time,double release);
 	double modulated(double freq, double time,double release);

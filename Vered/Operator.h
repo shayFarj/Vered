@@ -11,6 +11,8 @@ public:
 	Operator(int mult, double mod_index,Envelope env);
 	Operator();
 
+	Operator(Operator& rhs);
+	Operator& operator=(Operator& rhs);
 	~Operator();
 
 	

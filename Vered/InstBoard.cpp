@@ -6,7 +6,7 @@
 
 InstBoard::InstBoard()
 {
-	this->cells.push_back(std::vector<vered::casCell>());
+
 }
 InstBoard::~InstBoard()
 {
@@ -24,126 +24,128 @@ void InstBoard::render()
 
 	ImGui::Begin("Instrument Board");
 
-	if (ImGui::BeginTable("Cascades", this->cells.size(), ImGuiTableFlags_Borders))
-	{
-		for (int row = 0; row < this->maxCol + 1; row++)
+	if (this->cells.size() > 0) {
+		if (ImGui::BeginTable("Cascades", this->cells.size(), ImGuiTableFlags_Borders))
 		{
-			if (row == 0)
+			for (int row = 0; row < this->maxCol + 1; row++)
 			{
-				ImGui::TableNextRow();
-				for (int column = 0; column < this->cells.size(); column++)
+				if (row == 0)
 				{
-					ImGui::TableSetColumnIndex(column);
-					if (column == 0)
-						ImGui::Text("Output layer");
-					else
-						ImGui::Text("Layer %d", column);
+					ImGui::TableNextRow();
+					for (int column = 0; column < this->cells.size(); column++)
+					{
+						ImGui::TableSetColumnIndex(column);
+						if (column == 0)
+							ImGui::Text("Output layer");
+						else
+							ImGui::Text("Layer %d", column);
 
-					if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
-						this->sCol = column;
+						if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
+							this->sCol = column;
+						}
+
+						if (column == this->sCol)
+							ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, IM_COL32(0, 255, 0, 32));
 					}
-
-					if(column == this->sCol)
-						ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, IM_COL32(0, 255, 0, 32));
-				}
-
-			}
-			else {
-				ImGui::TableNextRow();
-				for (int column = 0; column < this->cells.size(); column++)
-				{
-					ImGui::TableSetColumnIndex(column);
-					if(this->cells[column].size() > row - 1)
-						ImGui::Text("Cascade  %d : %d", this->cells[column][row-1].column, this->cells[column][row - 1].row);
-					else
-						ImGui::Text("Empty");
-
-					if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
-						if (this->cCol1 == column && this->cRow1 == row - 1 || this->cCol2 == column && this->cRow2 == row - 1)
-						{
-							int swap = this->cCol2;
-							this->cCol2 = this->cCol1;
-							this->cCol1 = swap;
-
-							swap = this->cRow2;
-							this->cRow2 = this->cRow1;
-							this->cRow1 = swap;
-
-							bool ifExistsR = (this->cCol1 < this->cells.size()) && (this->cRow1 < this->cells[cCol1].size());
-							bool ifExistsB = (this->cCol2 < this->cells.size()) && (this->cRow2 < this->cells[cCol2].size());
-							
-							if(ifExistsR)
-								this->cBoardR.setCas(this->cells[this->cCol1][this->cRow1].cas);
-							else
-								this->cBoardR.setCas(nullptr);
-							if(ifExistsB)
-								this->cBoardB.setCas(this->cells[this->cCol2][this->cRow2].cas);
-							else
-								this->cBoardB.setCas(nullptr);
-
-						}
-						else {
-							
-							this->cCol1 = column;
-							this->cRow1 = row - 1;
-
-							bool ifExistsR = (this->cCol1 < this->cells.size()) && (this->cRow1 < this->cells[cCol1].size());
-
-							if(ifExistsR)
-								this->cBoardR.setCas(this->cells[this->cCol1][this->cRow1].cas);
-							else
-								this->cBoardR.setCas(nullptr);
-						}
-					
-					}
-					if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
-						if (this->cCol2 == column && this->cRow2 == row - 1 || this->cCol1 == column && this->cRow1 == row - 1)
-						{
-
-							int swap = this->cCol2;
-							this->cCol2 = this->cCol1;
-							this->cCol1 = swap;
-
-							swap = this->cRow2;
-							this->cRow2 = this->cRow1;
-							this->cRow1 = swap;
-
-							bool ifExistsR = (this->cCol1 < this->cells.size()) && (this->cRow1 < this->cells[cCol1].size());
-							bool ifExistsB = (this->cCol2 < this->cells.size()) && (this->cRow2 < this->cells[cCol2].size());
-
-							if(ifExistsB)
-								this->cBoardB.setCas(this->cells[this->cCol2][this->cRow2].cas);
-							else
-								this->cBoardB.setCas(nullptr);
-
-							if(ifExistsR)
-								this->cBoardR.setCas(this->cells[this->cCol1][this->cRow1].cas);
-							else
-								this->cBoardR.setCas(nullptr);
-						}
-						else {
-							this->cCol2 = column;
-							this->cRow2 = row - 1;
-
-							bool ifExistsB = (this->cCol2 < this->cells.size()) && (this->cRow2 < this->cells[cCol2].size());
-							if (ifExistsB)
-								this->cBoardB.setCas(this->cells[this->cCol2][this->cRow2].cas);
-							else
-								this->cBoardB.setCas(nullptr);
-						}
-					}
-
-					if(this->cCol1 == column && this-> cRow1 == row - 1)
-						ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, IM_COL32(255, 0, 0, 128));
-					
-					if(this->cCol2 == column && this-> cRow2 == row - 1)
-						ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, IM_COL32(0, 0, 255, 128));
-					
 
 				}
+				else {
+					ImGui::TableNextRow();
+					for (int column = 0; column < this->cells.size(); column++)
+					{
+						ImGui::TableSetColumnIndex(column);
+						if (this->cells[column].size() > row - 1)
+							ImGui::Text("Cascade  %d : %d", this->cells[column][row - 1].column, this->cells[column][row - 1].row);
+						else
+							ImGui::Text("Empty");
+
+						if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
+							if (this->cCol1 == column && this->cRow1 == row - 1 || this->cCol2 == column && this->cRow2 == row - 1)
+							{
+								int swap = this->cCol2;
+								this->cCol2 = this->cCol1;
+								this->cCol1 = swap;
+
+								swap = this->cRow2;
+								this->cRow2 = this->cRow1;
+								this->cRow1 = swap;
+
+								bool ifExistsR = (this->cCol1 < this->cells.size()) && (this->cRow1 < this->cells[cCol1].size());
+								bool ifExistsB = (this->cCol2 < this->cells.size()) && (this->cRow2 < this->cells[cCol2].size());
+
+								if (ifExistsR)
+									this->cBoardR.setCas(this->cells[this->cCol1][this->cRow1].cas);
+								else
+									this->cBoardR.setCas(nullptr);
+								if (ifExistsB)
+									this->cBoardB.setCas(this->cells[this->cCol2][this->cRow2].cas);
+								else
+									this->cBoardB.setCas(nullptr);
+
+							}
+							else {
+
+								this->cCol1 = column;
+								this->cRow1 = row - 1;
+
+								bool ifExistsR = (this->cCol1 < this->cells.size()) && (this->cRow1 < this->cells[cCol1].size());
+
+								if (ifExistsR)
+									this->cBoardR.setCas(this->cells[this->cCol1][this->cRow1].cas);
+								else
+									this->cBoardR.setCas(nullptr);
+							}
+
+						}
+						if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
+							if (this->cCol2 == column && this->cRow2 == row - 1 || this->cCol1 == column && this->cRow1 == row - 1)
+							{
+
+								int swap = this->cCol2;
+								this->cCol2 = this->cCol1;
+								this->cCol1 = swap;
+
+								swap = this->cRow2;
+								this->cRow2 = this->cRow1;
+								this->cRow1 = swap;
+
+								bool ifExistsR = (this->cCol1 < this->cells.size()) && (this->cRow1 < this->cells[cCol1].size());
+								bool ifExistsB = (this->cCol2 < this->cells.size()) && (this->cRow2 < this->cells[cCol2].size());
+
+								if (ifExistsB)
+									this->cBoardB.setCas(this->cells[this->cCol2][this->cRow2].cas);
+								else
+									this->cBoardB.setCas(nullptr);
+
+								if (ifExistsR)
+									this->cBoardR.setCas(this->cells[this->cCol1][this->cRow1].cas);
+								else
+									this->cBoardR.setCas(nullptr);
+							}
+							else {
+								this->cCol2 = column;
+								this->cRow2 = row - 1;
+
+								bool ifExistsB = (this->cCol2 < this->cells.size()) && (this->cRow2 < this->cells[cCol2].size());
+								if (ifExistsB)
+									this->cBoardB.setCas(this->cells[this->cCol2][this->cRow2].cas);
+								else
+									this->cBoardB.setCas(nullptr);
+							}
+						}
+
+						if (this->cCol1 == column && this->cRow1 == row - 1)
+							ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, IM_COL32(255, 0, 0, 128));
+
+						if (this->cCol2 == column && this->cRow2 == row - 1)
+							ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, IM_COL32(0, 0, 255, 128));
+
+
+					}
+				}
 			}
+			ImGui::EndTable();
 		}
-		ImGui::EndTable();
 	}
 
 	if (ImGui::Button("Add layer"))
@@ -155,8 +157,7 @@ void InstBoard::render()
 	{
 		if (this->sCol != -1) {
 			PaStreamer::pauseStream();
-			Cascade* cas = new Cascade;
-			*cas = Cascade();
+			Cascade* cas = new Cascade();
 
 			vered::casCell nCell = vered::casCell(cas);
 			nCell.setPos(this->sCol, this->cells[this->sCol].size());
@@ -286,20 +287,22 @@ void InstBoard::render()
 		this->inst.clear();
 
 		this->cells.clear();
-		/*this->cBoardB.setCas(nullptr);
-		this->cBoardR.setCas(nullptr);
+		
+		this->cells = Files::loadTable("C:\\Users\\Farjoon\\Downloads\\caca\\baba.txt");
 
-		this->cCol1 = -1;
-		this->cCol2 = -1;
-		this->cRow1 = -1;
-		this->cRow2 = -1;*/
+		if (this->cells.size() != 0) {
+			for (int i = 0; i < this->cells.size(); i++)
+			{
+				this->inst.appendCas(this->cells[0][i].cas);
+			}
 
-		//this->cells = Files::loadTable("C:\\Users\\Farjoon\\Downloads\\caca\\baba.txt");
+			this->maxCol = this->cells[0].size();
+			for (int i = 1; i < this->cells.size(); i++)
+				this->maxCol = this->maxCol > this->cells[i].size() ? this->maxCol : this->cells[i].size();
+		}
+		else
+			this->maxCol = 0;
 
-		//if(this->cells.size() > 0)
-		//	for (int i = 0; i < this->cells[0].size(); i++)
-		//		this->inst.appendCas(this->cells[0][i].cas);
-		//
 		PaStreamer::unpauseStream();
 
 	}

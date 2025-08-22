@@ -8,6 +8,55 @@ Cascade::Cascade()
 
 Cascade::~Cascade()
 {
+	Operator* iter = this->carrier;
+	while (iter != nullptr)
+	{
+		Operator* opIn = iter->in;
+		delete iter;
+		iter = opIn;
+	}
+	this->carrier = nullptr;
+	this->tail = nullptr;
+}
+
+Cascade::Cascade(Cascade& rhs)
+{
+	if (rhs.carrier != nullptr) {
+		this->carrier = new Operator(*rhs.carrier);
+
+		Operator* iter = this->carrier;
+		Operator* rIter = rhs.carrier->in;
+		while (rIter != nullptr)
+		{
+			iter->in = new Operator(*rIter);
+			iter = iter->in;
+
+			rIter = rIter->in;
+		}
+		this->tail = iter;
+	}
+
+}
+
+Cascade& Cascade::operator=(Cascade& rhs)
+{
+	if (this != &rhs) {
+		if (rhs.carrier != nullptr) {
+			this->carrier = new Operator(*rhs.carrier);
+
+			Operator* iter = this->carrier;
+			Operator* rIter = rhs.carrier->in;
+			while (rIter != nullptr)
+			{
+				iter->in = new Operator(*rIter);
+				iter = iter->in;
+
+				rIter = rIter->in;
+			}
+			this->tail = iter;
+		}
+	}
+	return *this;
 }
 
 double Cascade::Output(double freq, double time,double release)

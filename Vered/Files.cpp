@@ -34,12 +34,11 @@ std::vector<std::vector<vered::casCell>> Files::loadTable(const char* filepath)
 			opData[i] = std::stod(num);
 		}
 
-		if(opData[0] > table.size() - 1)
+		if(opData[0] + 1 > table.size())
 			table.push_back(std::vector<vered::casCell>());
 
-		if (opData[1] > table[(int)opData[0]].size() - 1) {
-			Cascade* cas = new Cascade;
-			*cas = Cascade();
+		if (opData[1] + 1 > table[(int)opData[0]].size()) {
+			Cascade* cas = new Cascade();
 
 			vered::casCell nCell = vered::casCell(cas);
 			nCell.setPos((int)opData[0], table[(int)opData[0]].size());
@@ -47,9 +46,8 @@ std::vector<std::vector<vered::casCell>> Files::loadTable(const char* filepath)
 			table[(int)opData[0]].push_back(nCell);
 		}
 
-		Operator* op = new Operator;
-
-		*op = Operator(opData[2], opData[3],Envelope(opData[4], opData[5], opData[6], opData[7], opData[8], opData[9], opData[10]));
+		Envelope* env = new Envelope(opData[4], opData[5], opData[6], opData[7], opData[8], opData[9], opData[10]);
+		Operator* op = new Operator(opData[2], opData[3], *env);
 
 		table[(int)opData[0]][(int)opData[1]].cas->Prepend(op);
 

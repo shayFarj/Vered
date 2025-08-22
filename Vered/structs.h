@@ -43,6 +43,9 @@ namespace vered
 
 		}
 
+		~casCell() {
+		}
+
 		void setPos(int column, int row)
 		{
 			this->row = row;
