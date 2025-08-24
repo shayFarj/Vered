@@ -5,7 +5,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-void work(FourierCalc& calc, int index, Instrument& inst,int freq, int time_steps, double time_step, double time_base,int division)
+void work(FourierCalc& calc, int index, Instrument& inst,double freq, int time_steps, double time_step, double time_base,int division)
 {
 	int partLen = calc.data_len / division;
 
@@ -38,7 +38,7 @@ void work(FourierCalc& calc, int index, Instrument& inst,int freq, int time_step
 
 }
 
-FourierCalc::FourierCalc(int data_len,int start_freq,int end_freq) : data_len(data_len), freq_step(((double)(abs(end_freq - start_freq))) / data_len),start_freq(start_freq < end_freq ? start_freq : end_freq)
+FourierCalc::FourierCalc(int data_len,double start_freq,double end_freq) : data_len(data_len), freq_step(((abs(end_freq - start_freq))) / data_len),start_freq(start_freq < end_freq ? start_freq : end_freq)
 {
 	this->data = new double[data_len];
 }
@@ -89,12 +89,12 @@ void FourierCalc::resetData()
 	this->data_len = this->data_len;
 }
 
-void FourierCalc::resetData(int data_len,int start_freq,int end_freq)
+void FourierCalc::resetData(int data_len,double start_freq,double end_freq)
 {
 	delete[] this->data;
 
 	this->start_freq = start_freq < end_freq ? start_freq : end_freq;
-	this->freq_step = ((double)(abs(start_freq - end_freq))) / data_len;
+	this->freq_step = ((abs(start_freq - end_freq))) / data_len;
 
 	this->data = new double[data_len];
 	this->data_len = data_len;
@@ -112,9 +112,9 @@ bool FourierCalc::isReady()
 
 double* FourierCalc::getStatus()
 {
-	double* cStatus = new double[2];
+	double* cStatus = new double[this->status_len];
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < this->status_len; i++)
 	{
 		cStatus[i] = this->status[i];
 	}
@@ -123,30 +123,35 @@ double* FourierCalc::getStatus()
 
 }
 
-void FourierCalc::init(Instrument& inst, int freq, int time_steps, double time_step, double time_base, int threads)
+void FourierCalc::init(Instrument& inst, double freq, int time_steps, double time_step, double time_base, int threads)
 {
-	if (this->data_len % threads != 0)
+	if (this->data_len % threads == 0)
+	{
+
+
+		delete[] this->status;
+		this->status = new double[threads];
+		this->status_len = threads;
+
+		auto selfRef = std::ref(*this);
+		auto instRef = std::ref(inst);
+
+		std::thread* t = new std::thread[threads];
+
+		for (int i = 0; i < threads; i++)
+		{
+			t[i] = std::thread(&work, selfRef, i, instRef, freq, time_steps, time_step, time_base, threads);
+		}
+
+		this->onwork.store(true);
+
+		for (int i = 0; i < threads; i++)
+		{
+			t[i].detach();
+		}
+	}
+	else
+	{
 		throw std::exception("FourierCalc : Data can't devide by number of threads");
-
-	delete[] this->status;
-	this->status = new double[threads];
-	this->status_len = threads;
-
-	auto selfRef = std::ref(*this);
-	auto instRef = std::ref(inst);
-
-	std::thread* t = new std::thread[threads];
-
-	for (int i = 0; i < threads; i++)
-	{
-		t[i] = std::thread(&work, selfRef, i, instRef, freq, time_steps, time_step, time_base, threads);
 	}
-
-	this->onwork.store(true);
-
-	for (int i = 0; i < threads; i++)
-	{
-		t[i].detach();
-	}
-
 }

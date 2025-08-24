@@ -13,10 +13,6 @@
 MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),mixer(nullptr)
 {
 	// modulation index 0.001 correlates to 40 total level in deflemask
-	
-
-	this->iBoard = InstBoard();
-
 	this->mixer.setInstrument(iBoard.getInst());
 
 	
@@ -75,33 +71,33 @@ void MainWin::render()
 	ImGui::Text(msg2.c_str());
 
 	
-	//if (!fc_1.onWork() && !fc_2.onWork() /*&& !fc_3.onWork()*/)
-	//{
-	//	if (ImGui::Button("begin"))
-	//	{
-	//		fc_1.init(this->inst1,880,1000,0.0001,0,10);
-	//		fc_2.init(this->inst2, 880, 1000, 0.0001, 0, 10);
-	//		//fc_3.init(this->inst, 880, 1000, 0.0001, 0, 10);
-	//	}
-	//}
-	//if (fc_1.isReady() && fc_2.isReady() /*&& fc_3.isReady()*/)
-	//{
+	if (!fc_1.onWork() && !fc_2.onWork() /*&& !fc_3.onWork()*/)
+	{
+		if (ImGui::Button("begin"))
+		{
+			fc_1.init(*this->iBoard.getInst(), 880, 1000, 0.0001, 0, 10);
+			fc_2.init(*this->iBoard.getInst(), 880, 1000, 0.0001, 0, 10);
+			//fc_3.init(this->inst, 880, 1000, 0.0001, 0, 10);
+		}
+	}
+	if (fc_1.isReady() && fc_2.isReady() /*&& fc_3.isReady()*/)
+	{
 
-	//	ImGui::Text("It's ready!");
-	//	if (ImGui::Button("Display Chart"))
-	//	{
-	//		this->showGraph = true;
-	//	}
-	//	if (this->showGraph)
-	//	{
-	//		if (ImPlot::BeginPlot("Fourier")) {
-	//			ImPlot::PlotLine("Instrument1", fc_1.getRange(), fc_1.copyData(), fc_1.getDataLen());
-	//			ImPlot::PlotLine("Instrument2", fc_2.getRange(), fc_2.copyData(), fc_2.getDataLen());
-	//			//ImPlot::PlotLine("Fourier_880", fc_3.getRange(), fc_3.copyData(), fc_3.getDataLen());
-	//			ImPlot::EndPlot();
-	//		}
-	//	}
-	//}
+		ImGui::Text("It's ready!");
+		if (ImGui::Button("Display Chart"))
+		{
+			this->showGraph = true;
+		}
+		if (this->showGraph)
+		{
+			if (ImPlot::BeginPlot("Fourier")) {
+				ImPlot::PlotLine("Instrument1", fc_1.getRange(), fc_1.copyData(), fc_1.getDataLen());
+				ImPlot::PlotLine("Instrument2", fc_2.getRange(), fc_2.copyData(), fc_2.getDataLen());
+				//ImPlot::PlotLine("Fourier_880", fc_3.getRange(), fc_3.copyData(), fc_3.getDataLen());
+				ImPlot::EndPlot();
+			}
+		}
+	}
 
 	//KeysInput::update();
 
@@ -124,15 +120,14 @@ void MainWin::render()
 
 	
 
-	if (ImPlot::BeginPlot("wave"))
+	if (ImPlot::BeginPlot("Mix"))
 	{
-		ImPlot::PlotLine("ee", x_range, wav, pBuffer->samples);
+		ImPlot::PlotLine("Mix", x_range, wav, pBuffer->samples);
 		ImPlot::EndPlot();
 		//this->source.queueBuffer(pBuffer);
 		//this->source.stream();
 	}
 	
-
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
 

@@ -198,6 +198,7 @@
     <ClInclude Include="MainWin.h" />
     <ClInclude Include="Operator.h" />
     <ClInclude Include="PaStreamer.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SoundSource.h" />
     <ClInclude Include="structs.h" />
     <ClInclude Include="vendor\imgui\backends\imgui_impl_dx10.h" />
@@ -248,6 +249,12 @@
   <ItemGroup>
     <Library Include="vendor\imgui\libs\glfw\lib-vc2010-32\glfw3.lib" />
     <Library Include="vendor\imgui\libs\glfw\lib-vc2010-64\glfw3.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Vered.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\Downloads\veredicon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

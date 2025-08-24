@@ -5,7 +5,7 @@
 class FourierCalc
 {
 public:
-	FourierCalc(int data_len,int freq_start, int freq_end);
+	FourierCalc(int data_len,double freq_start, double freq_end);
 	~FourierCalc();
 
 
@@ -14,14 +14,14 @@ public:
 	bool isReady();
 
 	void resetData();
-	void resetData(int data_len, int freq_start, int freq_end);
+	void resetData(int data_len, double freq_start, double freq_end);
 
 	double* copyData();
 	double* getRange();
 	int getStatusLen();
 	int getDataLen();
 
-	void init(Instrument& inst, int freq, int time_steps, double time_step, double time_base, int threads = 2);
+	void init(Instrument& inst, double freq, int time_steps, double time_step, double time_base, int threads = 2);
 
 private:
 	double * status = new double[2];
@@ -34,8 +34,8 @@ private:
 	double* data;
 	double freq_step;
 	int data_len;
-	int start_freq;
+	double start_freq;
 
-	friend void work(FourierCalc& calc, int index, Instrument& inst, int freq, int time_steps, double time_step, double time_base,int devision);
+	friend void work(FourierCalc& calc, int index, Instrument& inst, double freq, int time_steps, double time_step, double time_base,int devision);
 };
 
