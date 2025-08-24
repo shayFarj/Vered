@@ -10,7 +10,7 @@
 #include "string"
 #include "PaStreamer.h"
 
-MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),mixer(nullptr),fWin(this->iBoard.getInst())
+MainWin::MainWin(): mixer(nullptr),fWin(this->iBoard.getInst())
 {
 	// modulation index 0.001 correlates to 40 total level in deflemask
 	this->mixer.setInstrument(iBoard.getInst());
