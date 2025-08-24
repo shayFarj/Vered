@@ -75,8 +75,8 @@ void MainWin::render()
 	{
 		if (ImGui::Button("begin"))
 		{
-			fc_1.init(*this->iBoard.getInst(), 880, 1000, 0.0001, 0, 10);
-			fc_2.init(*this->iBoard.getInst(), 880, 1000, 0.0001, 0, 10);
+			fc_1.init(*this->iBoard.getInst(), 880, 1000, 0.0001, 0,0,4);
+			fc_2.init(*this->iBoard.getInst(), 880, 1000, 0.0001, 0, 0,4);
 			//fc_3.init(this->inst, 880, 1000, 0.0001, 0, 10);
 		}
 	}

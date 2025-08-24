@@ -5,7 +5,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-void work(FourierCalc& calc, int index, Instrument& inst,double freq, int time_steps, double time_step, double time_base,int division)
+void work(FourierCalc& calc, int index, Instrument& inst,double freq, int time_steps, double time_step, double time_base,double r_time_base,int division)
 {
 	int partLen = calc.data_len / division;
 
@@ -14,9 +14,18 @@ void work(FourierCalc& calc, int index, Instrument& inst,double freq, int time_s
 		double cFreq = calc.start_freq + i * calc.freq_step;
 		double sum = 0;
 
-		for (double j = time_base; j <= time_step * time_steps && !calc.interrupted;j += time_step)
+		if (r_time_base == 0) {
+			for (double j = time_base; j <= time_base + time_step * time_steps && !calc.interrupted; j += time_step)
+			{
+				sum += inst.Output(freq, j, 0) * cos(-2 * M_PI * cFreq * j);
+			}
+		}
+		else
 		{
-			sum += inst.Output(freq,j,0) * cos(- 2 * M_PI * cFreq * j);
+			for (double j = r_time_base; j <= r_time_base + time_step * time_steps && !calc.interrupted; j += time_step)
+			{
+				sum += inst.Output(freq, time_base, j) * cos(-2 * M_PI * cFreq * j);
+			}
 		}
 		sum /= time_steps;
 
@@ -123,7 +132,7 @@ double* FourierCalc::getStatus()
 
 }
 
-void FourierCalc::init(Instrument& inst, double freq, int time_steps, double time_step, double time_base, int threads)
+void FourierCalc::init(Instrument& inst, double freq, int time_steps, double time_step, double time_base,double r_time_base, int threads)
 {
 	if (this->data_len % threads == 0)
 	{
@@ -140,7 +149,7 @@ void FourierCalc::init(Instrument& inst, double freq, int time_steps, double tim
 
 		for (int i = 0; i < threads; i++)
 		{
-			t[i] = std::thread(&work, selfRef, i, instRef, freq, time_steps, time_step, time_base, threads);
+			t[i] = std::thread(&work, selfRef, i, instRef, freq, time_steps, time_step, time_base,r_time_base, threads);
 		}
 
 		this->onwork.store(true);

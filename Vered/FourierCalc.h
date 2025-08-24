@@ -21,7 +21,7 @@ public:
 	int getStatusLen();
 	int getDataLen();
 
-	void init(Instrument& inst, double freq, int time_steps, double time_step, double time_base, int threads = 2);
+	void init(Instrument& inst, double freq, int time_steps, double time_step, double time_base,double r_time_base, int threads = 2);
 
 private:
 	double * status = new double[2];
@@ -36,6 +36,6 @@ private:
 	int data_len;
 	double start_freq;
 
-	friend void work(FourierCalc& calc, int index, Instrument& inst, double freq, int time_steps, double time_step, double time_base,int devision);
+	friend void work(FourierCalc& calc, int index, Instrument& inst, double freq, int time_steps, double time_step, double time_base,double r_time_base,int devision);
 };
 
