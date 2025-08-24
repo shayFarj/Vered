@@ -13,11 +13,15 @@ public:
 
 	static void pauseStream();
 	static void unpauseStream();
+	static int getOctave();
+	static void setOctave(int octave);
 
 private:
 	static Instrument * inst;
 
 	static int sampleRate;
+
+	static int octave;
 
 	static PaStream * stream;
 	

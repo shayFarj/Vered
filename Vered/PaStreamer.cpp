@@ -8,10 +8,21 @@
 PaStream* PaStreamer::stream;
 int PaStreamer::sampleRate = 48000;
 Instrument * PaStreamer::inst;
+int PaStreamer::octave = 0;
 
 double PaStreamer::prevTime = 0;
 double PaStreamer::phase = 0;
 bool PaStreamer::first = true;
+
+int PaStreamer::getOctave()
+{
+    return PaStreamer::octave;
+}
+
+void PaStreamer::setOctave(int octave)
+{
+    PaStreamer::octave = octave;
+}
 
 void PaStreamer::pauseStream()
 {
@@ -106,12 +117,12 @@ int PaStreamer::callback(const void* input,
 
             if (r1 > 0)
             {
-                channel = PaStreamer::inst->Output(130.81 * pow(2, j / 12.0), p1, r1 + i * delta) * 0.2;
+                channel = PaStreamer::inst->Output(130.81* pow(2,PaStreamer::octave) * pow(2, j / 12.0), p1, r1 + i * delta) * 0.2;
             }
             else
             {
                 if (p1 != 0)
-                    channel = PaStreamer::inst->Output(130.81 * pow(2, j / 12.0), p1 + i * delta, 0) * 0.2;
+                    channel = PaStreamer::inst->Output(130.81 * pow(2, PaStreamer::octave) * pow(2, j / 12.0), p1 + i * delta, 0) * 0.2;
             }
 
 

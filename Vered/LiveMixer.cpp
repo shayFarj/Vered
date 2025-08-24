@@ -2,7 +2,7 @@
 #include "KeysInput.h"
 #include <chrono>
 #include <iostream>
-
+#include "PaStreamer.h"
 LiveMixer::LiveMixer(const LiveMixer& rhs) :
 	inst(rhs.inst),
 	keys_press(KeysInput::getKeysPress()),
@@ -51,12 +51,12 @@ vered::bufferDouble LiveMixer::getDemoBufferMono(int sampleRate)
 
 				if (r1 > 0)
 				{
-					channel = this->inst->Output(110.0 * pow(2, j / 12.0), p1, r1 + i * delta);
+					channel = this->inst->Output(110.0 * pow(2,PaStreamer::getOctave())* pow(2, j / 12.0), p1, r1 + i * delta);
 				}
 				else
 				{
 					if(this->keys_press[j] != 0)
-						channel = this->inst->Output(110.0 * pow(2, j / 12.0), p1 + i * delta, 0);
+						channel = this->inst->Output(110.0 * pow(2, PaStreamer::getOctave()) * pow(2, j / 12.0), p1 + i * delta, 0);
 				}
 
 

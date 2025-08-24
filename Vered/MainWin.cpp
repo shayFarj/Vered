@@ -94,6 +94,19 @@ void MainWin::render()
 		//this->source.stream();
 	}
 	
+	ImGui::Text("Current Octave:");
+	ImGui::Text(std::to_string(PaStreamer::getOctave()).c_str());
+
+	if (ImGui::Button("Raise Octave"))
+	{
+		PaStreamer::setOctave(PaStreamer::getOctave() + 1);
+	}
+
+	if (ImGui::Button("Low Octave"))
+	{
+		PaStreamer::setOctave(PaStreamer::getOctave() - 1);
+	}
+
 	this->fWin.render();
 
 	ImGui::PopStyleColor();
