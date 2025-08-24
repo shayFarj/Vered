@@ -10,7 +10,7 @@
 #include "string"
 #include "PaStreamer.h"
 
-MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),mixer(nullptr)
+MainWin::MainWin(): fc_1(4000,0,4000), fc_2(4000, 0, 4000), fc_3(4000, 0, 4000),mixer(nullptr),fWin(this->iBoard.getInst())
 {
 	// modulation index 0.001 correlates to 40 total level in deflemask
 	this->mixer.setInstrument(iBoard.getInst());
@@ -69,40 +69,6 @@ void MainWin::render()
 
 	ImGui::Text(msg.c_str());
 	ImGui::Text(msg2.c_str());
-
-	
-	if (!fc_1.onWork() && !fc_2.onWork() /*&& !fc_3.onWork()*/)
-	{
-		if (ImGui::Button("begin"))
-		{
-			fc_1.init(*this->iBoard.getInst(), 880, 1000, 0.0001, 0,0,4);
-			fc_2.init(*this->iBoard.getInst(), 880, 1000, 0.0001, 0, 0,4);
-			//fc_3.init(this->inst, 880, 1000, 0.0001, 0, 10);
-		}
-	}
-	if (fc_1.isReady() && fc_2.isReady() /*&& fc_3.isReady()*/)
-	{
-
-		ImGui::Text("It's ready!");
-		if (ImGui::Button("Display Chart"))
-		{
-			this->showGraph = true;
-		}
-		if (this->showGraph)
-		{
-			if (ImPlot::BeginPlot("Fourier")) {
-				ImPlot::PlotLine("Instrument1", fc_1.getRange(), fc_1.copyData(), fc_1.getDataLen());
-				ImPlot::PlotLine("Instrument2", fc_2.getRange(), fc_2.copyData(), fc_2.getDataLen());
-				//ImPlot::PlotLine("Fourier_880", fc_3.getRange(), fc_3.copyData(), fc_3.getDataLen());
-				ImPlot::EndPlot();
-			}
-		}
-	}
-
-	//KeysInput::update();
-
-
-	//
 	
 	vered::bufferDouble* pBuffer = new vered::bufferDouble(nullptr,0,0);
 	*pBuffer = this->mixer.getDemoBufferMono(48000);//this->inst.getBuffer16Stereo(55, 0, 1, 48000);
@@ -128,6 +94,8 @@ void MainWin::render()
 		//this->source.stream();
 	}
 	
+	this->fWin.render();
+
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
 

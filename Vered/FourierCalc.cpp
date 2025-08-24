@@ -50,6 +50,7 @@ void work(FourierCalc& calc, int index, Instrument& inst,double freq, int time_s
 FourierCalc::FourierCalc(int data_len,double start_freq,double end_freq) : data_len(data_len), freq_step(((abs(end_freq - start_freq))) / data_len),start_freq(start_freq < end_freq ? start_freq : end_freq)
 {
 	this->data = new double[data_len];
+	this->range = this->getRange();
 }
 
 FourierCalc::~FourierCalc()
@@ -96,18 +97,45 @@ void FourierCalc::resetData()
 
 	this->data = new double[this->data_len];
 	this->data_len = this->data_len;
+
+	this->ready.store(false);
 }
 
-void FourierCalc::resetData(int data_len,double start_freq,double end_freq)
+
+const double* FourierCalc::refData()
+{
+	return this->data;
+}
+
+const double* FourierCalc::refRange()
+{
+	return this->range;
+}
+
+void FourierCalc::resetData(int data_len,double start_freq,double freq_step)
 {
 	delete[] this->data;
 
-	this->start_freq = start_freq < end_freq ? start_freq : end_freq;
-	this->freq_step = ((abs(start_freq - end_freq))) / data_len;
+	this->start_freq = start_freq;
+	this->freq_step = freq_step;
 
 	this->data = new double[data_len];
 	this->data_len = data_len;
+
+	delete[] this->range;
+
+	this->range = this->getRange();
+
+	this->ready.store(false);
 }
+
+
+void FourierCalc::syncAndReset(int data_len, double start_freq, double freq_step)
+{
+	if (this->data_len != data_len || this->start_freq != start_freq || this->freq_step != freq_step)
+		this->resetData(data_len, start_freq, freq_step);
+}
+
 
 bool FourierCalc::onWork()
 {

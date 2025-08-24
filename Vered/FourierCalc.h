@@ -14,9 +14,12 @@ public:
 	bool isReady();
 
 	void resetData();
-	void resetData(int data_len, double freq_start, double freq_end);
+	void resetData(int data_len, double freq_start, double freq_step);
+	void syncAndReset(int data_len, double freq_start, double freq_step);
 
 	double* copyData();
+	const double* refData();
+	const double* refRange();
 	double* getRange();
 	int getStatusLen();
 	int getDataLen();
@@ -32,6 +35,7 @@ private:
 	std::atomic<bool> interrupted = false;
 	
 	double* data;
+	double* range;
 	double freq_step;
 	int data_len;
 	double start_freq;

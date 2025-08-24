@@ -7,6 +7,7 @@
 #include "KeysInput.h"
 #include "LiveMixer.h"
 #include "InstBoard.h"
+#include "FourierWin.h"
 
 class MainWin
 {
@@ -43,6 +44,8 @@ private:
 	FourierCalc fc_1;
 	FourierCalc fc_2;
 	FourierCalc fc_3;
+	
+	FourierWin fWin;
 
 	bool showGraph = false;
 	bool havePlayed = false;

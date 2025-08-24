@@ -156,6 +156,7 @@
     <ClCompile Include="example_glfw_opengl3\main.cpp" />
     <ClCompile Include="Files.cpp" />
     <ClCompile Include="FourierCalc.cpp" />
+    <ClCompile Include="FourierWin.cpp" />
     <ClCompile Include="InstBoard.cpp" />
     <ClCompile Include="Instrument.cpp" />
     <ClCompile Include="KeysInput.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="Envelope.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="FourierCalc.h" />
+    <ClInclude Include="FourierWin.h" />
     <ClInclude Include="InstBoard.h" />
     <ClInclude Include="Instrument.h" />
     <ClInclude Include="KeysInput.h" />

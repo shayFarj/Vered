@@ -77,12 +77,14 @@ double Cascade::modulated(double freq, double time,double release)
 
 double Cascade::sin_phase(double freq, double time, double release)
 {
-	return this->carrier->sin_phase(freq, time, release, this->in, this->tail);
+	if(this->carrier != nullptr)
+		return this->carrier->sin_phase(freq, time, release, this->in, this->tail);
 }
 
 double Cascade::cos_phase(double freq, double time, double release)
 {
-	return this->carrier->cos_phase(freq, time, release, this->in, this->tail);
+	if(this->carrier != nullptr)
+		return this->carrier->cos_phase(freq, time, release, this->in, this->tail);
 }
 
 void Cascade::Prepend(Operator* tail)
