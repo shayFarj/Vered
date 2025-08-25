@@ -99,7 +99,7 @@ double Operator::cos_phase(double freq, double time, double release, std::vector
 
 double Operator::modulated(double freq, double time,double release,Operator* end)
 {
-	if (this != end || this->in != nullptr)
+	if (this != end && this->in != nullptr)
 		return this->env.calc(time, release) * sin(2 * M_PI * (freq * this->mult * (release + time) + this->in->cos_phase(freq, time,release,end)));
 	else
 		return this->env.calc(time, release) * this->Output(freq, time,release);
@@ -107,7 +107,7 @@ double Operator::modulated(double freq, double time,double release,Operator* end
 
 double Operator::modulated(double freq, double time, double release, std::vector<Cascade*>& cList, Operator* end)
 {
-	if (this != end || this->in != nullptr)
+	if (this != end && this->in != nullptr)
 		return this->env.calc(time, release) * sin(2 * M_PI * (freq * this->mult * (release + time) + this->in->cos_phase(freq, time, release,cList, end)));
 	else
 
