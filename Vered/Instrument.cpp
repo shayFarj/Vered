@@ -24,7 +24,6 @@ void Instrument::appendCas(Cascade* cas)
 void Instrument::eraseCas(int index)
 {
 	Cascade * rCas = this->cas[index];
-	delete rCas;
 	
 	this->cas.erase(this->cas.begin() + index);
 }
