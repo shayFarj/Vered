@@ -1,7 +1,7 @@
 #include "InstBoard.h"
 #include <imgui.h>
 #include "imgui_stdlib.h"
-#include "structs.h"
+#include "casCell.h"
 #include <iostream>
 #include "Files.h";
 #include <fstream>
@@ -12,7 +12,7 @@ InstBoard::InstBoard()
 }
 InstBoard::~InstBoard()
 {
-
+	
 }
 
 Instrument* InstBoard::getInst()
@@ -60,6 +60,14 @@ void InstBoard::render()
 							ImGui::Text("Cascade  %d : %d", this->cells[column][row - 1].column, this->cells[column][row - 1].row);
 						else
 							ImGui::Text("Empty");
+
+						if (row - 1 < this->cells[column].size()) {
+							int r = this->cells[column][row - 1].color[0];
+							int g = this->cells[column][row - 1].color[1];
+							int b = this->cells[column][row - 1].color[2];
+
+							ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, IM_COL32(r, g, b, 64));
+						}
 
 						if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
 							if (this->cCol1 == column && this->cRow1 == row - 1 || this->cCol2 == column && this->cRow2 == row - 1)
@@ -135,6 +143,8 @@ void InstBoard::render()
 									this->cBoardB.setCas(nullptr);
 							}
 						}
+
+
 
 						if (this->cCol1 == column && this->cRow1 == row - 1)
 							ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, IM_COL32(255, 0, 0, 128));
@@ -255,7 +265,7 @@ void InstBoard::render()
 		bool ifSelected = this->cCol2 != -1 && this->cRow2 != -1;
 		bool ifExists = (this->cCol2 < this->cells.size()) && (this->cRow2 < this->cells[cCol2].size());
 
-		if (ifExists)
+		if (ifExists&&ifSelected)
 		{
 			PaStreamer::pauseStream();
 			this->cells[this->cCol2][this->cRow2].Fire();
@@ -276,6 +286,39 @@ void InstBoard::render()
 		this->maxCol = this->cells[0].size();
 		for (int i = 1; i < this->cells.size(); i++)
 			this->maxCol = this->maxCol > this->cells[i].size() ? this->maxCol : this->cells[i].size();
+	}
+
+	if (ImGui::Button("Flood Red Cascade"))
+	{
+		bool ifSelected = this->cCol1 != -1 && this->cRow1 != -1;
+		bool ifExists = (this->cCol1 < this->cells.size()) && (this->cRow1 < this->cells[cCol1].size());
+
+		if (ifExists && ifSelected)
+		{
+			this->cells[this->cCol1][this->cRow1].Flood();
+		}
+	}
+
+	if (ImGui::Button("Flood Blue Cascade"))
+	{
+		bool ifSelected = this->cCol2 != -1 && this->cRow2 != -1;
+		bool ifExists = (this->cCol2 < this->cells.size()) && (this->cRow2 < this->cells[cCol2].size());
+
+		if (ifExists && ifSelected)
+		{
+			this->cells[this->cCol2][this->cRow2].Flood();
+		}
+	}
+
+	if (ImGui::Button("Drain All Cascades"))
+	{
+		for (int i = 0; i < this->cells.size(); i++)
+		{
+			for (int j = 0; j < this->cells[i].size(); j++)
+			{
+				this->cells[i][j].Drain();
+			}
+		}
 	}
 
 	ImGui::InputText("Instrument Filepath", &this->filepath);

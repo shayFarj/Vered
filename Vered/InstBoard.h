@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "structs.h"
+#include "casCell.h"
 #include "Instrument.h"
 #include <string>
 #include "CasBoard.h"

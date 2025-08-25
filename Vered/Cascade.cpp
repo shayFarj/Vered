@@ -19,7 +19,7 @@ Cascade::~Cascade()
 	this->tail = nullptr;
 }
 
-Cascade::Cascade(Cascade& rhs)
+Cascade::Cascade(const Cascade& rhs)
 {
 	if (rhs.carrier != nullptr) {
 		this->carrier = new Operator(*rhs.carrier);
@@ -38,7 +38,7 @@ Cascade::Cascade(Cascade& rhs)
 
 }
 
-Cascade& Cascade::operator=(Cascade& rhs)
+Cascade& Cascade::operator=(const Cascade& rhs)
 {
 	if (this != &rhs) {
 		if (rhs.carrier != nullptr) {

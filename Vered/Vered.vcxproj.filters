@@ -137,6 +137,9 @@
     <ClCompile Include="FourierWin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="casCell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="vendor\imgui\backends\imgui_impl_dx9.h">
@@ -317,6 +320,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FourierWin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="casCell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

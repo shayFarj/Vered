@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClCompile Include="CasBoard.cpp" />
     <ClCompile Include="Cascade.cpp" />
+    <ClCompile Include="casCell.cpp" />
     <ClCompile Include="Envelope.cpp" />
     <ClCompile Include="example_glfw_opengl3\main.cpp" />
     <ClCompile Include="Files.cpp" />
@@ -189,6 +190,7 @@
   <ItemGroup>
     <ClInclude Include="CasBoard.h" />
     <ClInclude Include="Cascade.h" />
+    <ClInclude Include="casCell.h" />
     <ClInclude Include="Envelope.h" />
     <ClInclude Include="Files.h" />
     <ClInclude Include="FourierCalc.h" />

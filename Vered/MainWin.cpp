@@ -47,7 +47,7 @@ void MainWin::render()
 
 	this->iBoard.render();
 
-	ImGui::Begin("Test");
+	ImGui::Begin("Mixer");
 
 
 	const double(&press)[24] = KeysInput::getKeysPress();
@@ -84,7 +84,6 @@ void MainWin::render()
 		wav[i] = (double)pBuffer->buffer[i];
 	}
 
-	
 
 	if (ImPlot::BeginPlot("Mix"))
 	{
@@ -93,6 +92,9 @@ void MainWin::render()
 		//this->source.queueBuffer(pBuffer);
 		//this->source.stream();
 	}
+
+	delete[] x_range;
+	delete[] wav;
 	
 	ImGui::Text("Current Octave:");
 	ImGui::Text(std::to_string(PaStreamer::getOctave()).c_str());
