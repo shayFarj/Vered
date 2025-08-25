@@ -169,14 +169,11 @@ void InstBoard::render()
 	{
 		if (this->sCol != -1) {
 			PaStreamer::pauseStream();
-			Cascade* cas = new Cascade();
 
-			vered::casCell nCell = vered::casCell(cas);
-			nCell.setPos(this->sCol, this->cells[this->sCol].size());
-
-			this->cells[this->sCol].push_back(nCell);
+			this->cells[this->sCol].emplace_back(new Cascade());
+			this->cells[this->sCol][this->cells[this->sCol].size() - 1].setPos(this->sCol, this->cells[this->sCol].size() - 1);
 			if (this->sCol == 0)
-				this->inst.appendCas(nCell.cas);
+				this->inst.appendCas(this->cells[this->sCol][this->cells[this->sCol].size() - 1].cas);
 
 			int size = this->cells[this->sCol].size();
 			if (size > this->maxCol)
@@ -353,6 +350,14 @@ void InstBoard::render()
 			this->cells.clear();
 
 			this->cells = Files::loadTable(this->filepath.c_str());
+			
+			this->cBoardB.setCas(nullptr);
+			this->cBoardR.setCas(nullptr);
+
+			this->cCol1 = -1;
+			this->cRow1 = -1;
+			this->cCol2 = -1;
+			this->cRow2 = -1;
 
 			if (this->cells.size() != 0) {
 				for (int i = 0; i < this->cells[0].size(); i++)

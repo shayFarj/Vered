@@ -23,6 +23,7 @@ public:
 	void popCas(Cascade* cas,bool del = false);
 
 	void getData(std::string& content,std::string& pos);
+	std::string getChainStr();
 
 private:
 	friend class CasBoard;

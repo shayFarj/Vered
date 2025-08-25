@@ -138,6 +138,19 @@ void Cascade::appendCas(Cascade* cas)
 
 }
 
+std::string Cascade::getChainStr()
+{
+	std::string chain = "";
+	Operator* iter = this->carrier;
+	while (iter != nullptr)
+	{
+
+		chain += std::to_string((unsigned long long)iter) + " ";
+		iter = iter->in;
+	}
+	return chain;
+}
+
 void Cascade::switchOps(Operator* back, Operator* front, Operator* out)
 {
 	if (back == this->tail) {

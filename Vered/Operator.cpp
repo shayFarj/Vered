@@ -15,15 +15,17 @@ Operator::Operator(Operator& rhs)
 	this->in = nullptr;
 	this->mod_index = rhs.mod_index;
 	this->mult = rhs.mult;
-	
+	this->env = rhs.env;
 }
 
 Operator& Operator::operator=(Operator& rhs)
 {
-	this->in = nullptr;
-	this->mod_index = rhs.mod_index;
-	this->mult = rhs.mult;
-
+	if (this != &rhs) {
+		this->in = nullptr;
+		this->mod_index = rhs.mod_index;
+		this->mult = rhs.mult;
+		this->env = rhs.env;
+	}
 	return *this;
 }
 

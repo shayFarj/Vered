@@ -25,13 +25,15 @@ Envelope::Envelope(Envelope& rhs)
 
 Envelope& Envelope::operator=(Envelope& rhs)
 {
-	this->a_x = rhs.a_x;
-	this->a_y = rhs.a_y;
-	this->s_x = rhs.s_x;
-	this->s_y = rhs.s_y;
-	this->d_x = rhs.d_x;
-	this->d_y = rhs.d_y;
-	this->r = rhs.r;
+	if (this != &rhs) {
+		this->a_x = rhs.a_x;
+		this->a_y = rhs.a_y;
+		this->s_x = rhs.s_x;
+		this->s_y = rhs.s_y;
+		this->d_x = rhs.d_x;
+		this->d_y = rhs.d_y;
+		this->r = rhs.r;
+	}
 
 	return *this;
 }

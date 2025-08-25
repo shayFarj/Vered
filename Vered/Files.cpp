@@ -38,12 +38,11 @@ std::vector<std::vector<vered::casCell>> Files::loadTable(const char* filepath)
 			table.push_back(std::vector<vered::casCell>());
 
 		if (opData[1] + 1 > table[(int)opData[0]].size()) {
-			Cascade* cas = new Cascade();
+			table[(int)opData[0]].emplace_back(new Cascade());
 
-			vered::casCell nCell = vered::casCell(cas);
-			nCell.setPos((int)opData[0], table[(int)opData[0]].size());
+			int row = table[(int)opData[0]].size() - 1;
 
-			table[(int)opData[0]].push_back(nCell);
+			table[(int)opData[0]][row].setPos((int)opData[0], row);
 		}
 
 		Envelope* env = new Envelope(opData[4], opData[5], opData[6], opData[7], opData[8], opData[9], opData[10]);
@@ -70,7 +69,7 @@ std::vector<std::vector<vered::casCell>> Files::loadTable(const char* filepath)
 	return table;
 }
 
-void Files::saveTable(std::vector<std::vector<vered::casCell>> table,const char* filepath)
+void Files::saveTable(const std::vector<std::vector<vered::casCell>>& table,const char* filepath)
 {
 	std::string content = "";
 

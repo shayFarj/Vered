@@ -49,6 +49,7 @@ static void glfw_quit_callback(GLFWwindow* gWin)
 // Main code
 int main(int, char**)
 {
+
     KeysInput::KeysInput();
 
     glfwSetErrorCallback(glfw_error_callback);
