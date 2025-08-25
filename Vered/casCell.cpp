@@ -8,16 +8,16 @@ namespace vered {
 
 	}
 
-	//casCell::casCell(const casCell& rhs)
-	//{
-	//	this->cas = new Cascade(*rhs.cas);
-	//	this->color[0] = rhs.color[0];
-	//	this->color[1] = rhs.color[1];
-	//	this->color[2] = rhs.color[2];
+	casCell::casCell(const casCell& rhs)
+	{
+		this->cas = new Cascade(*rhs.cas);
+		this->color[0] = rhs.color[0];
+		this->color[1] = rhs.color[1];
+		this->color[2] = rhs.color[2];
 
-	//	this->column = rhs.column;
-	//	this->row = rhs.row;
-	//}
+		this->column = rhs.column;
+		this->row = rhs.row;
+	}
 
 	//casCell& casCell::operator=(const casCell& rhs)
 	//{

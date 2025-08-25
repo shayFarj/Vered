@@ -63,7 +63,11 @@ std::vector<std::vector<vered::casCell>> Files::loadTable(const char* filepath)
 			conData[i] = std::stoi(num);
 		}
 
-		table[conData[0]][conData[1]].cEnsureInput(&table[conData[2]][conData[3]]);
+		bool ifExistsFront = conData[0] < table.size() && conData[1] < table[conData[0]].size();
+		bool ifExistsBack = conData[2] < table.size() && conData[3] < table[conData[2]].size();
+
+		if(ifExistsBack && ifExistsFront)
+			table[conData[0]][conData[1]].cEnsureInput(&table[conData[2]][conData[3]]);
 	}
 
 	return table;

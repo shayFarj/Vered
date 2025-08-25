@@ -6,7 +6,7 @@ namespace vered {
 	public:
 
 		casCell(Cascade* cas);
-		//casCell(const casCell& rhs);
+		casCell(const casCell& rhs);
 		//casCell& operator=(const casCell& rhs);
 		~casCell();
 
