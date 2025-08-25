@@ -243,8 +243,9 @@ void InstBoard::render()
 
 			if (this->cCol1 == 0)
 				this->inst.eraseCas(this->cRow1);
-			else
-				delete this->cells[this->cCol1][this->cRow1].cas;
+			
+			delete this->cells[this->cCol1][this->cRow1].cas;
+
 			this->cBoardR.setCas(nullptr);
 
 			this->cells[this->cCol1].erase(this->cells[this->cCol1].begin() + this->cRow1);
@@ -272,8 +273,9 @@ void InstBoard::render()
 
 			if (this->cCol2 == 0)
 				this->inst.eraseCas(this->cRow2);
-			else
-				delete this->cells[this->cCol2][this->cRow2].cas;
+			
+			delete this->cells[this->cCol2][this->cRow2].cas;
+
 			this->cBoardB.setCas(nullptr);
 			this->cells[this->cCol2].erase(this->cells[this->cCol2].begin() + this->cRow2);
 			PaStreamer::unpauseStream();
