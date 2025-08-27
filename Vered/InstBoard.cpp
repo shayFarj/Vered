@@ -85,6 +85,11 @@ void InstBoard::loadInstFile(const char* filepath)
 		this->cBoardB.setCas(nullptr);
 		this->cBoardR.setCas(nullptr);
 
+		this->cRowB = -1;
+		this->cColB = -1;
+		this->cRowR = -1;
+		this->cColR = -1;
+
 		this->inst->clear();
 
 		for (std::vector<vered::casCell*> col : this->cells)
