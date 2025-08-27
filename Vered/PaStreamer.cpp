@@ -55,7 +55,7 @@ void PaStreamer::init(Instrument * inst)
     if (err != paNoError)
         std::cout << "PA ERROR : " << Pa_GetErrorText(err) << std::endl;
     else
-        std::cout << "wsg bro" << std::endl;
+        std::cout << "Initialized PortAudio" << std::endl;
 
     PaError err2 = Pa_OpenDefaultStream(&PaStreamer::stream,
         0,          /* no input channels */
@@ -75,7 +75,7 @@ void PaStreamer::init(Instrument * inst)
     if (err2 != paNoError)
         std::cout << "PA ERROR : " << Pa_GetErrorText(err2) << std::endl;
     else
-        std::cout << "wsg bro" << std::endl;
+        std::cout << "Initialized PortAudio Stream" << std::endl;
 
     PaStreamer::inst = inst;
 

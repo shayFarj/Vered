@@ -104,7 +104,6 @@ void Cascade::Prepend(Operator* tail)
 
 void Cascade::Append(Operator* carrier)
 {
-	std::cout <<"Tail : " << this->tail << " Carrier : " << this->carrier << std::endl;
 	if (this->carrier != nullptr)
 	{
 		carrier->in = this->carrier;
