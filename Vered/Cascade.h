@@ -20,7 +20,7 @@ public:
 	double cos_phase(double freq, double time, double release);
 
 	void appendCas(Cascade* cas);
-	void popCas(Cascade* cas,bool del = false);
+	void popCas(Cascade* cas);
 
 	void getData(std::string& content,std::string& pos);
 	std::string getChainStr();
@@ -30,6 +30,7 @@ private:
 
 	void switchOps(Operator * back,Operator * front, Operator* out);
 	void deleteOp(Operator* op, Operator* out);
+	int findCas(Cascade* cas);
 
 	Operator* carrier = nullptr;
 	Operator* tail = nullptr;

@@ -1,9 +1,9 @@
 #include "casCell.h"
-
+#include <random>
 
 
 namespace vered {
-	casCell::casCell(Cascade* cas) : cas(cas)
+	casCell::casCell(Cascade* cas, int row, int column) :cas(cas), row(row),column(column)
 	{
 
 	}
@@ -11,173 +11,167 @@ namespace vered {
 	casCell::casCell(const casCell& rhs)
 	{
 		this->cas = new Cascade(*rhs.cas);
+		this->row = rhs.row;
+		this->column = rhs.column;
+
 		this->color[0] = rhs.color[0];
 		this->color[1] = rhs.color[1];
 		this->color[2] = rhs.color[2];
-
-		this->column = rhs.column;
-		this->row = rhs.row;
 	}
 
-	//casCell& casCell::operator=(const casCell& rhs)
-	//{
-	//	if (this != &rhs)
-	//	{
-	//		this->cas = new Cascade(*rhs.cas);
+	casCell& casCell::operator=(const casCell& rhs)
+	{
+		if (this != &rhs)
+		{
+			this->cas = new Cascade(*rhs.cas);
+			this->row = rhs.row;
+			this->column = rhs.column;
 
-	//		this->color[0] = rhs.color[0];
-	//		this->color[1] = rhs.color[1];
-	//		this->color[2] = rhs.color[2];
-
-	//		this->column = rhs.column;
-	//		this->row = rhs.row;
-	//	}
-	//	return *this;
-	//}
+			this->color[0] = rhs.color[0];
+			this->color[1] = rhs.color[1];
+			this->color[2] = rhs.color[2];
+		}
+		return *this;
+	}
 
 	casCell::~casCell()
 	{
+		delete this->cas;
 	}
 
-	void casCell::setPos(int column, int row)
+	void casCell::Fire()
+	{
+		for (casCell* cCell : this->in)
+			cCell->dMyOutput(this);
+
+		for (casCell* cCell : this->out)
+			cCell->dMyInput(this);
+
+	}
+
+	void casCell::Flood()
+	{
+		this->color[0] = std::rand() % 255;
+		this->color[1] = std::rand() % 255;
+		this->color[2] = std::rand() % 255;
+
+		for (casCell* cCell : this->in)
+			cCell->Flood(this->color[0], this->color[1], this->color[2], this);
+		for (casCell* cCell : this->out)
+			cCell->Flood(this->color[0], this->color[1], this->color[2], this);
+
+	}
+
+	void casCell::Flood(int r, int g, int b, casCell* irregular)
+	{
+		this->color[0] = r;
+		this->color[1] = g;
+		this->color[2] = b;
+
+		for (casCell* cCell : this->in)
+			if(cCell != irregular)
+				cCell->Flood(this->color[0], this->color[1], this->color[2], this);
+		for (casCell* cCell : this->out)
+			if (cCell != irregular)
+				cCell->Flood(this->color[0], this->color[1], this->color[2], this);
+
+	}
+
+	void casCell::setPos(int row, int column)
 	{
 		this->row = row;
 		this->column = column;
 	}
 
-	void casCell::Drain()
-	{
-		this->color[0] = 64;
-		this->color[1] = 64;
-		this->color[2] = 64;
-	}
-
-	void casCell::Fire()
-	{
-		for (int i = 0; i < this->in.size(); i++)
-			this->in[i]->dEnsureOutput(this);
-		for (int i = 0; i < this->out.size(); i++)
-			this->out[i]->dEnsureInput(this);
-	}
-
-	void casCell::Flood()
-	{
-
-		this->color[0] = rand() % 255;
-		this->color[1] = rand() % 255;
-		this->color[2] = rand() % 255;
-
-		for (int i = 0; i < this->in.size(); i++)
-			this->in[i]->FloodInput(this->color[0], this->color[1], this->color[2]);
-		for (int i = 0; i < this->out.size(); i++)
-			this->out[i]->FloodOutput(this->color[0], this->color[1], this->color[2]);
-	}
-
-	void casCell::FloodOutput(int r, int g, int b)
-	{
-		this->color[0] = r;
-		this->color[1] = g;
-		this->color[2] = b;
-
-		for (int i = 0; i < this->out.size(); i++)
-			this->out[i]->FloodOutput(r, g, b);
-	}
-
-	void casCell::FloodInput(int r, int g, int b)
-	{
-		this->color[0] = r;
-		this->color[1] = g;
-		this->color[2] = b;
-
-		for (int i = 0; i < this->in.size(); i++)
-			this->in[i]->FloodInput(r, g, b);
-	}
-
-	void casCell::cEnsureOutput(casCell* cCell)
+	int casCell::findInput(casCell* cCell)
 	{
 		int i = 0;
-		for (; i < cCell->in.size(); i++)
-			if (cCell->in[i] == this) break;
-
-
-		if (i == cCell->in.size()) {
-			cCell->in.push_back(this);
-			cCell->cas->appendCas(this->cas);
-		}
-
-
-		int j = 0;
-
-		for (; j < this->out.size(); j++)
-			if (this->out[j] == cCell) break;
-
-		if (j == this->out.size()) this->out.push_back(cCell);
-
+		for (; i < this->in.size() && this->in[i] != cCell; i++);
+		return i == this->in.size() ? -1 : i;
 	}
 
-	void casCell::dEnsureOutput(casCell* cCell)
+	int casCell::findOutput(casCell* cCell)
 	{
 		int i = 0;
-		for (; i < cCell->in.size(); i++)
-			if (cCell->in[i] == this) break;
-
-
-		if (i != cCell->in.size()) {
-			cCell->in.erase(cCell->in.begin() + i);
-			cCell->cas->popCas(this->cas);
-		}
-
-		int j = 0;
-
-		for (; j < this->out.size(); j++)
-			if (this->out[j] == cCell) break;
-
-		if (j != this->out.size()) {
-			this->out.erase(this->out.begin() + j);
-		}
+		for (; i < this->out.size() && this->out[i] != cCell; i++);
+		return i == this->out.size() ? -1 : i;
 	}
 
-	void casCell::cEnsureInput(casCell* cCell)
+	void casCell::dMyInput(casCell* cCell)
 	{
-		int i = 0;
-		for (; i < cCell->out.size(); i++)
-			if (cCell->out[i] == this) break;
+		if (cCell != nullptr && cCell != this && cCell->cas != this->cas) {
+			int oIndex = cCell->findOutput(this);
+			if (oIndex != -1) {
+				cCell->out.erase(cCell->out.begin() + oIndex);
+			}
 
-
-		if (i == cCell->out.size()) cCell->out.push_back(this);
-
-		int j = 0;
-
-		for (; j < this->in.size(); j++)
-			if (this->in[j] == cCell) break;
-
-		if (j == this->in.size()) {
-			this->in.push_back(cCell);
-			this->cas->appendCas(cCell->cas);
+			int iIndex = this->findInput(cCell);
+			if (iIndex != -1) {
+				this->in.erase(this->in.begin() + iIndex);
+				this->cas->popCas(cCell->cas);
+			}
 		}
-		/*else
-			std::cout << "Ensured Input Connected Already!" << std::endl;*/
 	}
 
-	void casCell::dEnsureInput(casCell* cCell)
+	void casCell::dMyOutput(casCell* cCell)
 	{
-		int i = 0;
-		for (; i < cCell->out.size(); i++)
-			if (cCell->out[i] == this) break;
+		if (cCell != nullptr && cCell != this && cCell->cas != this->cas) {
+			int oIndex = this->findOutput(cCell);
+			if (oIndex != -1) {
+				this->out.erase(this->out.begin() + oIndex);
+			}
 
-
-		if (i != cCell->out.size()) cCell->out.erase(cCell->out.begin() + i);
-
-		int j = 0;
-
-		for (; j < this->in.size(); j++)
-			if (this->in[j] == cCell) break;
-
-		if (j != this->in.size()) {
-			this->in.erase(this->in.begin() + j);
-			this->cas->popCas(cCell->cas);
+			int iIndex = cCell->findInput(this);
+			if (iIndex != -1) {
+				cCell->in.erase(cCell->in.begin() + iIndex);
+				cCell->cas->popCas(this->cas);
+			}
 		}
-		/*else
-			std::cout << "Ensured Input Disconnected Already!" << std::endl;*/
 	}
+	void casCell::cMyInput(casCell* cCell)
+	{
+		if (cCell != nullptr && cCell != this && cCell->cas != this->cas) {
+			int oIndex = cCell->findOutput(this);
+			if (oIndex == -1)
+				cCell->out.push_back(this);
+
+			int iIndex = this->findInput(cCell);
+			if (iIndex == -1) {
+				this->in.push_back(cCell);
+				this->cas->appendCas(cCell->cas);
+			}
+		}
+	}
+
+	void casCell::cMyOutput(casCell* cCell)
+	{
+		if (cCell != nullptr && cCell != this && cCell->cas != this->cas) {
+			int oIndex = this->findOutput(cCell);
+			if (oIndex == -1)
+				this->out.push_back(cCell);
+
+			int iIndex = cCell->findInput(this);
+			if (iIndex == -1) {
+				cCell->in.push_back(this);
+				cCell->cas->appendCas(this->cas);
+			}
+		}
+	}
+
+	bool casCell::isAfter(casCell* cCell)
+	{
+		if (cCell != nullptr)
+			return this->column - cCell->column == -1;
+
+		return false;
+	}
+
+	bool casCell::isBefore(casCell* cCell)
+	{
+		if (cCell != nullptr)
+			return this->column - cCell->column == 1;
+
+		return false;
+	}
+
 }

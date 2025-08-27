@@ -17,15 +17,33 @@ public:
 	
 
 private:
-	std::vector<std::vector<vered::casCell>> cells;
+	void swapCursors();
 
-	void newCas(int column);
+	void displayHeader();
+	void displayRow(int row);
 
-	int cRow1 = -1;
-	int cCol1 = -1;
+	bool cellExists(int row, int column);
+	void deleteCell(int row, int column);
 
-	int cRow2 = -1;
-	int cCol2 = -1;
+	void addLayer();
+	void addToLayer(int column);
+
+	void connectCells(int c1, int r1, int c2, int r2);
+	void disconnectCells(int c1, int r1, int c2, int r2);
+
+	bool isNeighbors(int c1, int c2);
+
+	void floodCell(int row, int column);
+
+	void refreshMaxCol();
+
+	std::vector<std::vector<vered::casCell *>> cells;
+
+	int cRowR = -1;
+	int cColR = -1;
+
+	int cRowB = -1;
+	int cColB = -1;
 
 	int maxCol = 0;
 
@@ -35,9 +53,11 @@ private:
 	std::string filepath = "";
 	std::string fileErr = "";
 
-	Instrument inst = Instrument();
 
-	CasBoard cBoardR = CasBoard("Red Cascade");
-	CasBoard cBoardB = CasBoard("Blue Cascade");
+
+	Instrument * inst;
+
+	CasBoard cBoardR;
+	CasBoard cBoardB;
 };
 

@@ -123,19 +123,12 @@ void Cascade::Append(Operator* carrier)
 
 void Cascade::appendCas(Cascade* cas)
 {
-	bool valid = true;
-	for (int i = 0; i < this->in.size(); i++)
-	{
-		valid = this->in[i] != cas;
-		if (!valid) break;
-	}
+	int index = this->findCas(cas);
+
 	
-	if (!valid || cas == nullptr || cas == this) {
-		throw("Invalid cascade appended");
+	if (!(index != -1 || cas == nullptr || cas == this)) {
+		this->in.push_back(cas);
 	}
-
-	this->in.push_back(cas);
-
 }
 
 std::string Cascade::getChainStr()
@@ -182,17 +175,21 @@ void Cascade::deleteOp(Operator* op, Operator* out)
 	delete op;
 }
 
-void Cascade::popCas(Cascade* cas, bool del)
+void Cascade::popCas(Cascade* cas)
+{
+	int index = findCas(cas);
+	if (index != -1)
+	{
+		this->in.erase(this->in.begin() + index);
+	}
+}
+
+int Cascade::findCas(Cascade* cas)
 {
 	int i = 0;
-	for (i = 0; i < this->in.size() && this->in[i] != cas; i++);
+	for (; i < this->in.size() && this->in[i] != cas; i++);
 
-	if (i != this->in.size())
-	{
-		//if(del)
-		//	delete this->in[i];
-		this->in.erase(this->in.begin() + i);
-	}
+	return i == this->in.size() ? -1 : i;
 }
 
 void Cascade::getData(std::string& content,std::string& pos)

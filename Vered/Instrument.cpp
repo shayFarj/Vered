@@ -28,6 +28,15 @@ void Instrument::eraseCas(int index)
 	this->cas.erase(this->cas.begin() + index);
 }
 
+void Instrument::eraseCas(Cascade* cas)
+{
+	for (int i = 0; i < this->cas.size(); i++)
+	{
+		if (this->cas[i] == cas)
+			this->cas.erase(this->cas.begin() + i);
+	}
+}
+
 void Instrument::clear()
 {
 	this->cas.clear();

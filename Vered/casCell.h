@@ -4,38 +4,42 @@ namespace vered {
 	class casCell
 	{
 	public:
-
-		casCell(Cascade* cas);
+		casCell(Cascade * cas,int row,int column);
 		casCell(const casCell& rhs);
-		//casCell& operator=(const casCell& rhs);
+		casCell& operator=(const casCell& rhs);
 		~casCell();
 
-		void setPos(int column, int row);
-
-		void Drain();
-
+		void Flood();
 		void Fire();
 
-		void Flood();
+		void setPos(int row, int column);
 
-		void cEnsureOutput(casCell* cCell);
-		void cEnsureInput(casCell* cCell);
+		void dMyOutput(casCell* cCell);
+		void dMyInput(casCell* cCell);
 
-		void dEnsureOutput(casCell* cCell);
-		void dEnsureInput(casCell* cCell);
+		void cMyOutput(casCell* cCell);
+		void cMyInput(casCell* cCell);
+
+		
+		int row;
+		int column;
+
+		Cascade* cas;
 
 		std::vector<casCell*> in;
 		std::vector<casCell*> out;
 
-		Cascade* cas;
-
 		int color[3] = { 64,64,64 };
 
-		int column = -1;
-		int row = -1;
+		bool isAfter(casCell* cCell);
+		bool isBefore(casCell* cCell);
 	private:
-		void FloodOutput(int r, int g, int b);
-		void FloodInput(int r, int g, int b);
+		
+
+		int findInput(casCell* cCell);
+		int findOutput(casCell* cCell);
+
+		void Flood(int r, int g, int b,casCell * irregular);
 	};
 
 }
