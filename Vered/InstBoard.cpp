@@ -5,6 +5,8 @@
 #include <iostream>
 #include "Files.h";
 #include <fstream>
+#include <sys/stat.h>
+#include <filesystem>
 
 InstBoard::InstBoard():cBoardB("Blue Cascade"),cBoardR("Red Cascade"),inst(new Instrument())
 {
@@ -54,12 +56,83 @@ void InstBoard::render()
 	if (ImGui::Button("Flood Blue Cascade"))
 		this->floodCell(this->cRowB, this->cColB);
 
+	if (ImGui::Button("Drain All Cells"))
+		this->drainCells();
 
+	ImGui::InputText("Instrument Filepath", &this->filepath);
+
+	if (ImGui::Button("Load Instrument"))
+		this->loadInstFile(this->filepath.c_str());
+
+	if (ImGui::Button("Save Instrument"))
+		this->saveInstFile(this->filepath.c_str());
+
+	ImGui::Text(this->fileErr.c_str());
 
 	ImGui::End();
 
 	this->cBoardB.render();
 	this->cBoardR.render();
+}
+
+void InstBoard::loadInstFile(const char* filepath)
+{
+	std::ifstream file(filepath);
+	if (file)
+	{
+		PaStreamer::pauseStream();
+
+		this->cBoardB.setCas(nullptr);
+		this->cBoardR.setCas(nullptr);
+
+		this->inst->clear();
+
+		for (std::vector<vered::casCell*> col : this->cells)
+			for (vered::casCell* cell : col)
+				delete cell;
+
+		this->cells.clear();
+
+		this->cells = Files::loadTable(filepath);
+
+		if (this->cells.size() > 0)
+			for (int i = 0; i < this->cells[0].size(); i++)
+				this->inst->appendCas(this->cells[0][i]->cas);
+
+		PaStreamer::unpauseStream();
+
+		this->refreshMaxCol();
+
+		this->fileErr = "";
+	}
+	else
+	{
+		this->fileErr = "Loading From Invalid Filepath";
+	}
+}
+
+void InstBoard::saveInstFile(const char * filepath)
+{
+	std::ofstream file(filepath);
+	if (file)
+	{
+		Files::saveTable(this->cells, filepath);
+
+		this->fileErr = "";
+	}
+	else
+	{
+		this->fileErr = "Saving At Invalid Filepath";
+	}
+}
+
+void InstBoard::drainCells()
+{
+	for (int i = 0; i < this->cells.size(); i++)
+	{
+		for (int j = 0; j < this->cells.size(); j++)
+			this->cells[i][j]->Drain();
+	}
 }
 
 Instrument* InstBoard::getInst()

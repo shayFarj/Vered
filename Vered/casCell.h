@@ -9,6 +9,8 @@ namespace vered {
 		casCell& operator=(const casCell& rhs);
 		~casCell();
 
+		void Drain();
+
 		void Flood();
 		void Fire();
 

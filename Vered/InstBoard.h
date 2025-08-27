@@ -17,6 +17,9 @@ public:
 	
 
 private:
+	void loadInstFile(const char * filepath);
+	void saveInstFile(const char * filepath);
+
 	void swapCursors();
 
 	void displayHeader();
@@ -24,6 +27,8 @@ private:
 
 	bool cellExists(int row, int column);
 	void deleteCell(int row, int column);
+
+	void drainCells();
 
 	void addLayer();
 	void addToLayer(int column);
@@ -49,7 +54,6 @@ private:
 
 	int sCol = -1;
 
-	std::string errMsg ="";
 	std::string filepath = "";
 	std::string fileErr = "";
 

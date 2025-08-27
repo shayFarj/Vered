@@ -143,6 +143,13 @@ namespace vered {
 		}
 	}
 
+	void casCell::Drain()
+	{
+		this->color[0] = 64;
+		this->color[1] = 64;
+		this->color[2] = 64;
+	}
+
 	void casCell::cMyOutput(casCell* cCell)
 	{
 		if (cCell != nullptr && cCell != this && cCell->cas != this->cas) {
