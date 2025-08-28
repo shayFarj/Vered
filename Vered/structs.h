@@ -8,7 +8,7 @@ namespace vered
 
 	const int pos_params = 2;
 	const int env_params = 7;
-	const int op_params = 2 + pos_params + env_params;
+	const int op_params = 3 + pos_params + env_params;
 
 	struct buffer16
 	{

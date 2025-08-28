@@ -4,7 +4,7 @@
 #include <math.h>
 #include <iostream>
 
-Operator::Operator(int mult, double mod_index,Envelope env) : mult(mult), mod_index(mod_index), in(nullptr),env(env)
+Operator::Operator(int mult, double mod_index,int fb,Envelope env) : mult(mult), mod_index(mod_index), in(nullptr),env(env)
 {
 
 }
@@ -15,6 +15,7 @@ Operator::Operator(Operator& rhs)
 	this->in = nullptr;
 	this->mod_index = rhs.mod_index;
 	this->mult = rhs.mult;
+	this->fb = rhs.fb;
 	this->env = rhs.env;
 }
 
@@ -24,13 +25,14 @@ Operator& Operator::operator=(Operator& rhs)
 		this->in = nullptr;
 		this->mod_index = rhs.mod_index;
 		this->mult = rhs.mult;
+		this->fb = rhs.fb;
 		this->env = rhs.env;
 	}
 	return *this;
 }
 
 
-Operator::Operator(): mult(1),mod_index(0.0001),in(nullptr),env(0,1,2,1,3,1,1)
+Operator::Operator(): mult(1),mod_index(0.0001),fb(0), in(nullptr), env(0, 1, 2, 1, 3, 1, 1)
 {
 	
 }
@@ -128,6 +130,8 @@ void Operator::getData(std::string& content)
 	content += std::to_string(this->mult);
 	content += ":";
 	content += std::to_string(this->mod_index);
+	content += ":";
+	content += std::to_string(this->fb);
 	content += ":";
 	this->env.getData(content);
 }
