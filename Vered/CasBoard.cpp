@@ -97,6 +97,7 @@ void CasBoard::render()
 			ImGui::Text("Selected Operator Settings:");
 			ImGui::InputInt("MULT", &(this->ops[this->sOp]->mult));
 			ImGui::InputDouble("MOD INDEX", &(this->ops[this->sOp]->mod_index));
+			ImGui::InputInt("SELF FEEDBACK", &(this->ops[this->sOp]->fb));
 			
 			Envelope* env = &this->ops[this->sOp]->env;
 			double a_x = env->getA_X();

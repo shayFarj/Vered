@@ -4,7 +4,7 @@
 #include <math.h>
 #include <iostream>
 
-Operator::Operator(int mult, double mod_index,int fb,Envelope env) : mult(mult), mod_index(mod_index), in(nullptr),env(env)
+Operator::Operator(int mult, double mod_index,int fb,Envelope env) : mult(mult), mod_index(mod_index),fb(fb), in(nullptr), env(env)
 {
 
 }
@@ -49,79 +49,185 @@ double Operator::Output(double freq, double time,double release)
 	return this->env.calc(time,release)*sin(2 * M_PI * (freq * this->mult * (time + release)));
 }
 
+double Operator::sin_phase_fb(double freq, double time, double release, int fb_left, Operator* end)
+{
+	if (fb_left > 0)
+	{
+		return this->env.calc(time, release) * freq * this->mult * this->mod_index * sin(2 * M_PI * (freq * this->mult * (release + time) + this->cos_phase_fb(freq, time, release, fb_left - 1, end)));
+	}
+	else
+	{
+		if (this != end && this->in != nullptr)
+			return this->in->sin_phase(freq, time, release, end);
+		else
+		{
+			return 0;
+		}
+	}
+}
+
+double Operator::cos_phase_fb(double freq, double time, double release, int fb_left, Operator* end)
+{
+	if (fb_left > 0)
+	{
+		return this->env.calc(time, release) * freq * this->mult * this->mod_index * cos(2 * M_PI * (freq * this->mult * (release + time) + this->sin_phase_fb(freq, time, release, fb_left - 1, end)));
+	}
+	else
+	{
+		if (this != end && this->in != nullptr)
+			return this->in->cos_phase(freq, time, release, end);
+		else
+		{
+			return 0;
+		}
+	}
+}
+
+double Operator::cos_phase_fb(double freq, double time, double release, int fb_left, std::vector<Cascade*>& cList, Operator* end)
+{
+	if (fb_left > 0)
+	{
+		return this->env.calc(time, release) * freq * this->mult * this->mod_index * cos(2 * M_PI * (freq * this->mult * (release + time) + this->sin_phase_fb(freq, time, release, fb_left - 1, cList, end)));
+	}
+	else
+	{
+		if (this != end && this->in != nullptr)
+			return this->in->cos_phase(freq, time, release, cList, end);
+		else
+		{
+			double inPhase = 0;
+
+			for (Cascade* c : cList)
+			{
+				inPhase += c->cos_phase(freq, time, release);
+			}
+
+			return inPhase;
+		}
+	}
+}
+
+double Operator::sin_phase_fb(double freq, double time, double release, int fb_left, std::vector<Cascade*>& cList, Operator* end)
+{
+	if (fb_left > 0)
+	{
+		return this->env.calc(time, release) * freq * this->mult * this->mod_index * sin(2 * M_PI * (freq * this->mult * (release + time) + this->cos_phase_fb(freq, time, release, fb_left - 1, cList, end)));
+	}
+	else
+	{
+		if (this != end && this->in != nullptr)
+			return this->in->sin_phase(freq, time, release, cList, end);
+		else
+		{
+			double inPhase = 0;
+
+			for (Cascade* c : cList)
+			{
+				inPhase += c->sin_phase(freq, time, release);
+			}
+
+			return inPhase;
+		}
+	}
+}
+
 double Operator::cos_phase(double freq, double time,double release,Operator * end)
 {
-	if (this->in != nullptr && this != end)
-		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * cos(2 * M_PI * (freq * this->mult * (release + time) + this->in->sin_phase(freq, time,release,end)));
-	else
-		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * cos(2 * M_PI * (freq * this->mult * (time + release)));
+	if(this->fb > 0)
+		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * cos(2 * M_PI * (freq * this->mult * (release + time) + this->sin_phase_fb(freq, time, release,this->fb, end)));
+	else {
+		if (this->in != nullptr && this != end)
+			return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * cos(2 * M_PI * (freq * this->mult * (release + time) + this->in->sin_phase(freq, time, release, end)));
+		else
+			return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * cos(2 * M_PI * (freq * this->mult * (time + release)));
+	}
 }
 
 double Operator::sin_phase(double freq, double time,double release,Operator * end)
 {
-	if (this->in != nullptr && this != end)
-		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * sin(2 * M_PI * (freq * this->mult * (time + release) + this->in->cos_phase(freq, time,release,end)));
-	else
-		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * sin(2 * M_PI * (freq * this->mult * (time + release)));
+	if(this->fb > 0)
+		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * sin(2 * M_PI * (freq * this->mult * (time + release) + this->cos_phase_fb(freq, time, release,this->fb, end)));
+	else {
+		if (this->in != nullptr && this != end)
+			return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * sin(2 * M_PI * (freq * this->mult * (time + release) + this->in->cos_phase(freq, time, release, end)));
+		else
+			return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * sin(2 * M_PI * (freq * this->mult * (time + release)));
+	}
 }
 
 double Operator::sin_phase(double freq, double time, double release,std::vector<Cascade*>& cList, Operator* end)
 {
-	if (this->in != nullptr && this != end)
-		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * sin(2 * M_PI * (freq * this->mult * (time + release) + this->in->cos_phase(freq, time, release,cList, end)));
-	else
-	{
-		double inPhase = 0;
-
-		for (Cascade* c : cList)
+	if(this->fb > 0)
+		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * sin(2 * M_PI * (freq * this->mult * (time + release) + this->in->cos_phase_fb(freq, time, release,this->fb, cList, end)));
+	else {
+		if (this->in != nullptr && this != end)
+			return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * sin(2 * M_PI * (freq * this->mult * (time + release) + this->in->cos_phase(freq, time, release, cList, end)));
+		else
 		{
-			inPhase += c->cos_phase(freq, time, release);
-		}
+			double inPhase = 0;
 
-		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * sin(2 * M_PI * (freq * this->mult * (time + release) + inPhase));
+			for (Cascade* c : cList)
+			{
+				inPhase += c->cos_phase(freq, time, release);
+			}
+
+			return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * sin(2 * M_PI * (freq * this->mult * (time + release) + inPhase));
+		}
 	}
 }
 
 double Operator::cos_phase(double freq, double time, double release, std::vector<Cascade*>& cList, Operator* end)
 {
-	if (this->in != nullptr && this != end)
-		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * cos(2 * M_PI * (freq * this->mult * (time + release) + this->in->sin_phase(freq, time, release,cList, end)));
-	else
-	{
-		double inPhase = 0;
-
-		for (Cascade* c : cList)
+	if(this->fb > 0)
+		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * cos(2 * M_PI * (freq * this->mult * (time + release) + this->sin_phase_fb(freq, time, release,this->fb, cList, end)));
+	else {
+		if (this->in != nullptr && this != end)
+			return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * cos(2 * M_PI * (freq * this->mult * (time + release) + this->in->sin_phase(freq, time, release, cList, end)));
+		else
 		{
-			inPhase += c->sin_phase(freq, time, release);
-		}
+			double inPhase = 0;
 
-		return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * cos(2 * M_PI * (freq * this->mult * (time + release) + inPhase));
+			for (Cascade* c : cList)
+			{
+				inPhase += c->sin_phase(freq, time, release);
+			}
+
+			return this->env.calc(time, release) * this->mod_index * (freq * this->mult) * cos(2 * M_PI * (freq * this->mult * (time + release) + inPhase));
+		}
 	}
 }
 
 double Operator::modulated(double freq, double time,double release,Operator* end)
 {
-	if (this != end && this->in != nullptr)
-		return this->env.calc(time, release) * sin(2 * M_PI * (freq * this->mult * (release + time) + this->in->cos_phase(freq, time,release,end)));
+	if(this->fb > 0)
+		return this->env.calc(time, release) * sin(2 * M_PI * (freq * this->mult * (release + time) + this->cos_phase_fb(freq, time, release,this->fb, end)));
+
 	else
-		return this->env.calc(time, release) * this->Output(freq, time,release);
+		if (this != end && this->in != nullptr)
+			return this->env.calc(time, release) * sin(2 * M_PI * (freq * this->mult * (release + time) + this->in->cos_phase(freq, time,release,end)));
+		else
+			return this->env.calc(time, release) * this->Output(freq, time,release);
 }
 
 double Operator::modulated(double freq, double time, double release, std::vector<Cascade*>& cList, Operator* end)
 {
-	if (this != end && this->in != nullptr)
-		return this->env.calc(time, release) * sin(2 * M_PI * (freq * this->mult * (release + time) + this->in->cos_phase(freq, time, release,cList, end)));
-	else
+	if(this->fb > 0)
+		return this->env.calc(time, release) * sin(2 * M_PI * (freq * this->mult * (release + time) + this->cos_phase_fb(freq, time, release, this->fb,cList, end)));
+	else {
+		if (this != end && this->in != nullptr)
+			return this->env.calc(time, release) * sin(2 * M_PI * (freq * this->mult * (release + time) + this->in->cos_phase(freq, time, release, cList, end)));
+		else
 
-	{
-		double inPhase = 0;
-
-		for (Cascade* c : cList)
 		{
-			inPhase += c->cos_phase(freq, time, release);
-		}
+			double inPhase = 0;
 
-		return this->env.calc(time, release) * sin(2 * M_PI * (freq * this->mult * (release + time) + inPhase));
+			for (Cascade* c : cList)
+			{
+				inPhase += c->cos_phase(freq, time, release);
+			}
+
+			return this->env.calc(time, release) * sin(2 * M_PI * (freq * this->mult * (release + time) + inPhase));
+		}
 	}
 }
 
