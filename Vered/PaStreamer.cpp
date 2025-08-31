@@ -14,6 +14,11 @@ double PaStreamer::prevTime = 0;
 double PaStreamer::phase = 0;
 bool PaStreamer::first = true;
 
+int PaStreamer::getSampleRate()
+{
+    return PaStreamer::sampleRate;
+}
+
 int PaStreamer::getOctave()
 {
     return PaStreamer::octave;

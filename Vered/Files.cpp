@@ -42,8 +42,8 @@ std::vector<std::vector<vered::casCell*>> Files::loadTable(const char* filepath)
 			table[(int)opData[0]].push_back(new vered::casCell(new Cascade(),row,(int)opData[0]));
 		}
 
-		Envelope* env = new Envelope(opData[5], opData[6], opData[7], opData[8], opData[9], opData[10], opData[11]);
-		Operator* op = new Operator(opData[2], opData[3],opData[4], *env);
+		Envelope* env = new Envelope(opData[7], opData[8], opData[9], opData[10], opData[11], opData[12], opData[13]);
+		Operator* op = new Operator(opData[2], opData[3],opData[4],opData[5],opData[6], *env);
 
 		table[(int)opData[0]][(int)opData[1]]->cas->Prepend(op);
 

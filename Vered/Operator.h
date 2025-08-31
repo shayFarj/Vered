@@ -8,7 +8,7 @@ class Operator
 public:
 	
 
-	Operator(int mult, double mod_index,int fb,Envelope env);
+	Operator(int mult, double mod_index,int fb,double fb_mult,int detune,Envelope env);
 	Operator();
 
 	Operator(Operator& rhs);
@@ -30,6 +30,8 @@ private:
 
 	int mult;
 	int fb;
+	int detune;
+	double fb_mult;
 	double mod_index;
 
 	double cos_phase(double freq, double time,double release,Operator * end = nullptr);
@@ -43,6 +45,8 @@ private:
 
 	double sin_phase_fb(double freq, double time, double release, int fb_left, std::vector<Cascade*>& cList, Operator* end = nullptr);
 	double cos_phase_fb(double freq, double time, double release, int fb_left, std::vector<Cascade*>& cList, Operator* end = nullptr);
+
+	double inline freqOp(double freq);
 
 	Envelope env;
 

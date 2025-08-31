@@ -15,6 +15,7 @@ public:
 	static void unpauseStream();
 	static int getOctave();
 	static void setOctave(int octave);
+	static int getSampleRate();
 
 private:
 	static Instrument * inst;

@@ -98,6 +98,9 @@ void CasBoard::render()
 			ImGui::InputInt("MULT", &(this->ops[this->sOp]->mult));
 			ImGui::InputDouble("MOD INDEX", &(this->ops[this->sOp]->mod_index));
 			ImGui::InputInt("SELF FEEDBACK", &(this->ops[this->sOp]->fb));
+			ImGui::InputDouble("FEEDBACK MULT", &(this->ops[this->sOp]->fb_mult));
+			ImGui::InputInt("DETUNE (128th of a semitone)", &(this->ops[this->sOp]->detune));
+
 			
 			Envelope* env = &this->ops[this->sOp]->env;
 			double a_x = env->getA_X();
