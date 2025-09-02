@@ -34,7 +34,7 @@ std::vector<std::vector<vered::casCell*>> Files::loadTable(const char* filepath)
 			opData[i] = std::stod(num);
 		}
 
-		if(opData[0] + 1 > table.size())
+		while(opData[0] + 1 > table.size())
 			table.push_back(std::vector<vered::casCell*>());
 
 		if (opData[1] + 1 > table[(int)opData[0]].size()) {
