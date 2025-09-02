@@ -35,7 +35,7 @@ void InstBoard::render()
 	if (ImGui::Button("Add Layer"))
 		this->addLayer();
 
-	if (ImGui::Button("Add To Layer"))
+	if (ImGui::Button("Add To Selected Layer"))
 		this->addToLayer(this->sCol);
 
 	if (ImGui::Button("Delete Blue Cascade"))
@@ -44,6 +44,9 @@ void InstBoard::render()
 	if (ImGui::Button("Delete Red Cascade"))
 		this->deleteCell(this->cRowR, this->cColR);
 	
+	if (ImGui::Button("Delete Selected Layer"))
+		this->deleteLayer(this->sCol);
+
 	if (ImGui::Button("Connect Cascades"))
 		this->connectCells(this->cColR, this->cRowR, this->cColB, this->cRowB);
 
@@ -66,6 +69,7 @@ void InstBoard::render()
 
 	if (ImGui::Button("Save Instrument"))
 		this->saveInstFile(this->filepath.c_str());
+
 
 	ImGui::Text(this->fileErr.c_str());
 
@@ -138,6 +142,62 @@ void InstBoard::drainCells()
 		for (int j = 0; j < this->cells.size(); j++)
 			this->cells[i][j]->Drain();
 	}
+}
+
+void InstBoard::deleteLayer(int column)
+{
+	
+	
+
+	if (column < this->cells.size() && column > -1)
+	{
+		PaStreamer::pauseStream();
+
+		if (this->cColB == column)
+		{
+			this->cColB = -1;
+			this->cRowB = -1;
+			this->cBoardB.setCas(nullptr);
+		}
+
+		if (this->cColR == column)
+		{
+			this->cColR = -1;
+			this->cRowR = -1;
+			this->cBoardR.setCas(nullptr);
+		}
+
+		for (int i = 0; i < this->cells[column].size(); i++)
+		{
+			this->cells[column][i]->Fire();
+			delete this->cells[column][i];
+			this->cells[column].erase(this->cells[column].begin() + i);
+		}
+		this->cells.erase(this->cells.begin() + column);
+
+		for (int i = column; i < this->cells.size(); i++)
+			for (int j = 0; j < this->cells[column].size(); j++)
+				this->cells[i][j]->setPos(j, this->cells[i][j]->column - 1);
+
+		if (column == 0)
+		{
+			this->inst->clear();
+			if (this->cells.size() > 0)
+				for (int i = 0; i < this->cells[0].size(); i++)
+					this->inst->appendCas(this->cells[0][i]->cas);
+		}
+
+		if (column == this->sCol)
+			this->sCol = -1;
+
+		this->refreshMaxCol();
+
+		PaStreamer::unpauseStream();
+	}
+
+	
+
+
 }
 
 Instrument* InstBoard::getInst()
@@ -313,6 +373,10 @@ void InstBoard::refreshMaxCol()
 		this->maxCol = this->cells[0].size();
 		for (int i = 1; i < this->cells.size(); i++)
 			this->maxCol = this->maxCol < this->cells[i].size() ? this->cells[i].size() : this->maxCol;
+	}
+	else
+	{
+		this->maxCol = 0;
 	}
 }
 

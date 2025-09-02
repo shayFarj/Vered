@@ -17,6 +17,8 @@ public:
 	
 
 private:
+	void deleteLayer(int column);
+
 	void loadInstFile(const char * filepath);
 	void saveInstFile(const char * filepath);
 
