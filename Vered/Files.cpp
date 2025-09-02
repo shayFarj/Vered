@@ -42,8 +42,8 @@ std::vector<std::vector<vered::casCell*>> Files::loadTable(const char* filepath)
 			table[(int)opData[0]].push_back(new vered::casCell(new Cascade(),row,(int)opData[0]));
 		}
 
-		Envelope* env = new Envelope(opData[7], opData[8], opData[9], opData[10], opData[11], opData[12], opData[13]);
-		Operator* op = new Operator(opData[2], opData[3],opData[4],opData[5],opData[6], *env);
+		Envelope env(opData[7], opData[8], opData[9], opData[10], opData[11], opData[12], opData[13]);
+		Operator* op = new Operator(opData[2], opData[3],opData[4],opData[5],opData[6], env);
 
 		table[(int)opData[0]][(int)opData[1]]->cas->Prepend(op);
 
@@ -95,18 +95,21 @@ void Files::saveTable(const std::vector<std::vector<vered::casCell*>>& table,con
 		{
 			for (int j = 0; j < table[i].size(); j++)
 			{
-				for (vered::casCell* cell : table[i][j]->in)
-				{
-					content += std::to_string(i);
-					content += ":";
-					content += std::to_string(j);
-					content += ":";
+				if(!table[i][j]->cas->isCarrierNull())
+					for (vered::casCell* cell : table[i][j]->in)
+					{
+						if (!cell->cas->isCarrierNull()) {
+							content += std::to_string(i);
+							content += ":";
+							content += std::to_string(j);
+							content += ":";
 
-					content += std::to_string(cell->column);
-					content += ":";
-					content += std::to_string(cell->row);
-					content += ":";
-				}
+							content += std::to_string(cell->column);
+							content += ":";
+							content += std::to_string(cell->row);
+							content += ":";
+						}
+					}
 			}
 		}
 

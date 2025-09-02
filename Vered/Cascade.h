@@ -25,7 +25,10 @@ public:
 	void getData(std::string& content,std::string& pos);
 	std::string getChainStr();
 
+	bool isCarrierNull();
+
 private:
+
 	friend class CasBoard;
 
 	void switchOps(Operator * back,Operator * front, Operator* out);

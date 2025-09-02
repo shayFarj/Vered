@@ -19,6 +19,11 @@ Cascade::~Cascade()
 	this->tail = nullptr;
 }
 
+bool Cascade::isCarrierNull()
+{
+	return this->carrier == nullptr;
+}
+
 Cascade::Cascade(const Cascade& rhs)
 {
 	if (rhs.carrier != nullptr) {
