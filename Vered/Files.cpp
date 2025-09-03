@@ -84,6 +84,8 @@ void Files::saveTable(const std::vector<std::vector<vered::casCell*>>& table,con
 {
 	std::string content = "";
 
+	content += vered::version_name + ";"
+
 	if (table.size() > 0) {
 		for (int i = 0; i < table.size(); i++)
 		{
