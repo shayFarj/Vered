@@ -1,5 +1,6 @@
 Installation:
-The program uses DLL files and .ini files, so make sure the said file(s) are at the same directory of the executable.
-You can make a shortcut for the executable in the desktop.
+In the release zipfile, there is the executable, an .ini file, and an .DLL file.
+Just make sure all these files are in the same directory.
+You can make a shortcut in the desktop.
 
 I might upload soon user-guide videos.
