@@ -67,7 +67,7 @@ void PaStreamer::init(Instrument * inst)
         2,          /* stereo output */
         paFloat32,  /* 32 bit floating point output */
         PaStreamer::sampleRate,
-        1,        /* frames per buffer, i.e. the number
+        paFramesPerBufferUnspecified,        /* frames per buffer, i.e. the number
                            of sample frames that PortAudio will
                            request from the callback. Many apps
                            may want to use

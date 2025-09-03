@@ -146,8 +146,6 @@ void InstBoard::drainCells()
 
 void InstBoard::deleteLayer(int column)
 {
-	
-	
 
 	if (column < this->cells.size() && column > -1)
 	{
