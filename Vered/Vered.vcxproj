@@ -135,6 +135,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="..\x64\Release\imgui.ini" />
+    <None Include="..\x64\Release\portaudio.dll" />
+    <None Include="..\x64\Release\Vered.exe" />
     <None Include="build_win32.bat" />
     <None Include="Makefile" />
     <None Include="Makefile.emscripten" />

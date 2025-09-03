@@ -10,6 +10,16 @@ std::vector<std::vector<vered::casCell*>> Files::loadTable(const char* filepath)
 	
 	std::ifstream file(filepath);
 	
+	std::string v_name;
+
+	std::getline(file, v_name,';');
+
+	if (v_name != vered::version_name)
+	{
+		std::cout << "Using incorrect version : \"" << v_name.c_str() << "\" when actual program's version is \"" << vered::version_name.c_str() << "\"" << std::endl;
+		return table;
+	}
+
 	std::string ops_str;
 	std::string cons_str;
 

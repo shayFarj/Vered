@@ -27,6 +27,9 @@
     <None Include="Makefile" />
     <None Include="Makefile.emscripten" />
     <None Include="vendor\OIS\OISPrereqs.h.in" />
+    <None Include="..\x64\Release\imgui.ini" />
+    <None Include="..\x64\Release\portaudio.dll" />
+    <None Include="..\x64\Release\Vered.exe" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="vendor\imgui\LICENSE.txt" />

@@ -9,6 +9,7 @@ namespace vered
 	const int pos_params = 2;
 	const int env_params = 7;
 	const int op_params = 5 + pos_params + env_params;
+	const std::string version_name = "v1";
 
 	struct buffer16
 	{
